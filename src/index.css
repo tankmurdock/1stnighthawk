@@ -1,0 +1,192 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-family-sans: "Inter", system-ui, sans-serif;
+
+  /* Brand Colors from Logo */
+  --color-brand-navy: #070a20;
+  --color-brand-blue: #126b9f;
+  --color-brand-gray: #9aa3af;
+  --color-brand-dark-gray: #595e6b;
+  --color-brand-light: #f6f6f7;
+
+  /* Primary Color Palette (Brand Blue) */
+  --color-primary-50: #f0f8ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #126b9f;
+  --color-primary-600: #0f5a87;
+  --color-primary-700: #0d4a6f;
+  --color-primary-800: #0a3957;
+  --color-primary-900: #070a20;
+
+  /* Secondary/Accent Colors (Brand Gray) */
+  --color-accent-50: #f8f9fa;
+  --color-accent-100: #f1f3f4;
+  --color-accent-200: #e8eaed;
+  --color-accent-300: #dadce0;
+  --color-accent-400: #bdc1c6;
+  --color-accent-500: #9aa3af;
+  --color-accent-600: #80868b;
+  --color-accent-700: #5f6368;
+  --color-accent-800: #595e6b;
+  --color-accent-900: #3c4043;
+
+  /* Gray Scale using brand grays */
+  --color-gray-50: #f6f6f7;
+  --color-gray-100: #f1f2f3;
+  --color-gray-200: #e4e6e8;
+  --color-gray-300: #d0d3d6;
+  --color-gray-400: #b4b8bc;
+  --color-gray-500: #9aa3af;
+  --color-gray-600: #7d8590;
+  --color-gray-700: #595e6b;
+  --color-gray-800: #4a4f5a;
+  --color-gray-900: #070a20;
+
+  /* Custom animations */
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-up: slideUp 0.5s ease-out;
+  --animate-slide-in-left: slideInLeft 0.5s ease-out;
+  --animate-slide-in-right: slideInRight 0.5s ease-out;
+  --animate-bounce-slow: bounce 2s infinite;
+  --animate-pulse-slow: pulse 3s infinite;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px #126b9f;
+  }
+  100% {
+    box-shadow: 0 0 20px #126b9f, 0 0 30px #126b9f;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-gray-900/10 backdrop-blur-md border border-gray-300/10;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent;
+  }
+
+  .gradient-brand {
+    @apply bg-gradient-to-r from-primary-500 via-primary-600 to-gray-900;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+  }
+
+  .btn-secondary {
+    @apply bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-2xl;
+  }
+
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(7, 10, 32, 0.1);
+  }
+
+  .brand-shadow {
+    box-shadow: 0 10px 25px -3px rgba(18, 107, 159, 0.1),
+      0 4px 6px -2px rgba(18, 107, 159, 0.05);
+  }
+
+  .brand-glow {
+    box-shadow: 0 0 20px rgba(18, 107, 159, 0.3);
+  }
+}
+
+/* Custom scrollbar with brand colors */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-gray-50);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-500);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-500);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Body styling with brand colors */
+body {
+  color: var(--color-gray-900);
+  background-color: var(--color-gray-50);
+}

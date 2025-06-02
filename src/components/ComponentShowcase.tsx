@@ -783,6 +783,352 @@ function FormComponents() {
           <Eye className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
         </div>
       </ComponentCard>
+
+      <ComponentCard title="Floating Label Input">
+        <div className="relative w-full">
+          <input
+            type="text"
+            id="floating_outlined"
+            className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-primary-600 peer"
+            placeholder=" "
+          />
+          <label
+            htmlFor="floating_outlined"
+            className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-primary-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+          >
+            Username
+          </label>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Input with Validation">
+        <div className="w-full space-y-2">
+          <div className="relative">
+            <input
+              type="email"
+              className="w-full px-4 py-3 border-2 border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all"
+              placeholder="Enter your email"
+              defaultValue="invalid-email"
+            />
+            <div className="absolute right-3 top-3">
+              <svg
+                className="w-5 h-5 text-red-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+          <p className="text-red-600 text-sm">
+            Please enter a valid email address
+          </p>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Success Input State">
+        <div className="w-full space-y-2">
+          <div className="relative">
+            <input
+              type="email"
+              className="w-full px-4 py-3 border-2 border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+              placeholder="Enter your email"
+              defaultValue="user@example.com"
+            />
+            <div className="absolute right-3 top-3">
+              <svg
+                className="w-5 h-5 text-green-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+          <p className="text-green-600 text-sm">Email format is valid</p>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Select Dropdown">
+        <div className="relative w-full">
+          <label htmlFor="framework-select" className="sr-only">
+            Choose a framework
+          </label>
+          <select
+            id="framework-select"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none bg-white"
+          >
+            <option>Choose a framework</option>
+            <option>React</option>
+            <option>Vue.js</option>
+            <option>Angular</option>
+            <option>Svelte</option>
+          </select>
+          <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+            <svg
+              className="w-4 h-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Multi-Select Tags">
+        <div className="w-full space-y-2">
+          <div className="flex flex-wrap gap-2 p-3 border border-gray-300 rounded-lg min-h-[46px] focus-within:ring-2 focus-within:ring-primary-500">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+              React
+              <button
+                className="ml-1 text-primary-600 hover:text-primary-800"
+                aria-label="Remove React tag"
+              >
+                <svg
+                  className="w-3 h-3"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </span>
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+              TypeScript
+              <button
+                className="ml-1 text-primary-600 hover:text-primary-800"
+                aria-label="Remove TypeScript tag"
+              >
+                <svg
+                  className="w-3 h-3"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </span>
+            <input
+              type="text"
+              className="flex-1 outline-none text-sm"
+              placeholder="Add skills..."
+              aria-label="Add new skill tag"
+            />
+          </div>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Password Input">
+        <div className="relative w-full">
+          <input
+            type="password"
+            className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+            placeholder="Enter password"
+            defaultValue="secretpassword"
+          />
+          <button
+            className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+            aria-label="Toggle password visibility"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+              />
+            </svg>
+          </button>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="File Upload">
+        <div className="w-full">
+          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <svg
+                className="w-8 h-8 mb-3 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
+              </svg>
+              <p className="mb-2 text-sm text-gray-500">
+                <span className="font-semibold">Click to upload</span> or drag
+                and drop
+              </p>
+              <p className="text-xs text-gray-500">
+                SVG, PNG, JPG or GIF (MAX. 800x400px)
+              </p>
+            </div>
+            <input type="file" className="hidden" />
+          </label>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Range Slider">
+        <div className="w-full space-y-2">
+          <div className="flex justify-between text-sm text-gray-600">
+            <span>Price Range</span>
+            <span>$25 - $75</span>
+          </div>
+          <div className="relative">
+            <label htmlFor="price-range" className="sr-only">
+              Price Range
+            </label>
+            <input
+              id="price-range"
+              type="range"
+              min="0"
+              max="100"
+              defaultValue="50"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+              style={{
+                background:
+                  "linear-gradient(to right, #126b9f 0%, #126b9f 50%, #e5e7eb 50%, #e5e7eb 100%)",
+              }}
+              aria-label="Price range slider"
+            />
+          </div>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Checkbox Group">
+        <div className="space-y-3">
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500"
+              defaultChecked
+            />
+            <span className="ml-2 text-sm text-gray-700">React</span>
+          </label>
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500"
+            />
+            <span className="ml-2 text-sm text-gray-700">Vue.js</span>
+          </label>
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500"
+              defaultChecked
+            />
+            <span className="ml-2 text-sm text-gray-700">Angular</span>
+          </label>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Radio Button Group">
+        <div className="space-y-3">
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="framework"
+              className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-500"
+              defaultChecked
+            />
+            <span className="ml-2 text-sm text-gray-700">Beginner</span>
+          </label>
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="framework"
+              className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-500"
+            />
+            <span className="ml-2 text-sm text-gray-700">Intermediate</span>
+          </label>
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="framework"
+              className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-500"
+            />
+            <span className="ml-2 text-sm text-gray-700">Advanced</span>
+          </label>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Textarea">
+        <div className="w-full">
+          <textarea
+            rows={4}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all resize-none"
+            placeholder="Tell us about your project..."
+            defaultValue="I'm looking for a modern UI design system that works across multiple frameworks..."
+          />
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Date Picker">
+        <div className="relative w-full">
+          <label htmlFor="date-picker" className="sr-only">
+            Select Date
+          </label>
+          <input
+            id="date-picker"
+            type="date"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+            defaultValue="2024-12-15"
+          />
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Time Picker">
+        <div className="relative w-full">
+          <label htmlFor="time-picker" className="sr-only">
+            Select Time
+          </label>
+          <input
+            id="time-picker"
+            type="time"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+            defaultValue="14:30"
+          />
+        </div>
+      </ComponentCard>
     </>
   );
 }
@@ -842,6 +1188,380 @@ function NavigationComponents() {
             }}
             className="bg-primary-500 h-2 rounded-full"
           />
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Underlined Tabs">
+        <div className="flex space-x-8 border-b border-gray-200">
+          <button className="pb-2 text-sm font-medium text-primary-600 border-b-2 border-primary-600">
+            Dashboard
+          </button>
+          <button className="pb-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors">
+            Analytics
+          </button>
+          <button className="pb-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors">
+            Reports
+          </button>
+          <button className="pb-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors">
+            Settings
+          </button>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Pill Tabs">
+        <div className="flex space-x-2">
+          <button className="px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium">
+            Overview
+          </button>
+          <button className="px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full text-sm font-medium transition-colors">
+            Details
+          </button>
+          <button className="px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full text-sm font-medium transition-colors">
+            Reviews
+          </button>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Vertical Navigation">
+        <div className="space-y-1 w-48">
+          <a
+            href="#"
+            className="bg-primary-100 text-primary-700 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+          >
+            <svg
+              className="text-primary-500 mr-3 h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"
+              />
+            </svg>
+            Dashboard
+          </a>
+          <a
+            href="#"
+            className="text-gray-700 hover:bg-gray-50 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+          >
+            <svg
+              className="text-gray-400 mr-3 h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+              />
+            </svg>
+            Team
+          </a>
+          <a
+            href="#"
+            className="text-gray-700 hover:bg-gray-50 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+          >
+            <svg
+              className="text-gray-400 mr-3 h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+            Projects
+          </a>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Pagination">
+        <nav className="flex items-center justify-between">
+          <div className="flex items-center">
+            <p className="text-sm text-gray-700">
+              Showing <span className="font-medium">1</span> to{" "}
+              <span className="font-medium">10</span> of{" "}
+              <span className="font-medium">97</span> results
+            </p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <button className="px-3 py-1 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+              Previous
+            </button>
+            <button className="px-3 py-1 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md">
+              1
+            </button>
+            <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+              2
+            </button>
+            <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+              3
+            </button>
+            <span className="px-3 py-1 text-sm font-medium text-gray-700">
+              ...
+            </span>
+            <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+              8
+            </button>
+            <button className="px-3 py-1 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+              Next
+            </button>
+          </div>
+        </nav>
+      </ComponentCard>
+
+      <ComponentCard title="Step Progress">
+        <div className="flex items-center">
+          <div className="flex items-center text-teal-600 relative">
+            <div className="rounded-full h-8 w-8 flex items-center justify-center bg-teal-500 text-white text-sm font-bold">
+              1
+            </div>
+            <div className="absolute top-0 -ml-10 text-center mt-10 w-32 text-xs font-medium text-teal-600">
+              Personal Info
+            </div>
+          </div>
+          <div className="flex-auto border-t-2 border-teal-500"></div>
+          <div className="flex items-center text-teal-600 relative">
+            <div className="rounded-full h-8 w-8 flex items-center justify-center bg-teal-500 text-white text-sm font-bold">
+              2
+            </div>
+            <div className="absolute top-0 -ml-10 text-center mt-10 w-32 text-xs font-medium text-teal-600">
+              Address
+            </div>
+          </div>
+          <div className="flex-auto border-t-2 border-gray-300"></div>
+          <div className="flex items-center text-gray-500 relative">
+            <div className="rounded-full h-8 w-8 flex items-center justify-center bg-white border-2 border-gray-300 text-sm font-bold">
+              3
+            </div>
+            <div className="absolute top-0 -ml-10 text-center mt-10 w-32 text-xs font-medium text-gray-500">
+              Payment
+            </div>
+          </div>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Mobile Menu Button">
+        <div className="flex items-center space-x-4">
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+            aria-label="Open menu"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </motion.button>
+          <span className="text-sm text-gray-600">Hamburger Menu</span>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Dropdown Menu">
+        <div className="relative inline-block text-left">
+          <button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
+            Options
+            <svg
+              className="-mr-1 ml-2 h-5 w-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+          <div className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+            <div className="py-1">
+              <a
+                href="#"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Account settings
+              </a>
+              <a
+                href="#"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Support
+              </a>
+              <a
+                href="#"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                License
+              </a>
+              <div className="border-t border-gray-100"></div>
+              <a
+                href="#"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Sign out
+              </a>
+            </div>
+          </div>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Breadcrumb with Icons">
+        <nav className="flex" aria-label="Breadcrumb">
+          <ol className="flex items-center space-x-4">
+            <li>
+              <div className="flex items-center">
+                <svg
+                  className="w-4 h-4 text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414L11.414 10l4.293 4.293a1 1 0 010 1.414L10 11.414 5.707 7.121a1 1 0 010-1.414z" />
+                </svg>
+                <span className="sr-only">Home</span>
+              </div>
+            </li>
+            <li>
+              <div className="flex items-center">
+                <svg
+                  className="w-4 h-4 text-gray-400 mx-2"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <a href="#" className="text-primary-600 hover:text-primary-800">
+                  Projects
+                </a>
+              </div>
+            </li>
+            <li>
+              <div className="flex items-center">
+                <svg
+                  className="w-4 h-4 text-gray-400 mx-2"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-gray-500">Project Neptune</span>
+              </div>
+            </li>
+          </ol>
+        </nav>
+      </ComponentCard>
+
+      <ComponentCard title="Mini Pagination">
+        <div className="flex items-center space-x-2">
+          <button
+            className="p-2 rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-50"
+            aria-label="Previous page"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <span className="text-sm text-gray-700">Page 1 of 10</span>
+          <button
+            className="p-2 rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-50"
+            aria-label="Next page"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Segmented Control">
+        <div className="flex bg-gray-200 rounded-lg p-1">
+          <button className="flex-1 py-2 px-4 rounded-md bg-white text-sm font-medium text-gray-900 shadow-sm">
+            List
+          </button>
+          <button className="flex-1 py-2 px-4 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900">
+            Grid
+          </button>
+          <button className="flex-1 py-2 px-4 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900">
+            Card
+          </button>
+        </div>
+      </ComponentCard>
+
+      <ComponentCard title="Progress Steps">
+        <div className="w-full">
+          <div className="flex items-center">
+            <div className="flex items-center text-teal-600 relative">
+              <div className="rounded-full h-8 w-8 flex items-center justify-center bg-teal-500 text-white text-sm font-bold">
+                1
+              </div>
+              <div className="absolute top-0 -ml-10 text-center mt-10 w-32 text-xs font-medium text-teal-600">
+                Personal Info
+              </div>
+            </div>
+            <div className="flex-auto border-t-2 border-teal-500"></div>
+            <div className="flex items-center text-teal-600 relative">
+              <div className="rounded-full h-8 w-8 flex items-center justify-center bg-teal-500 text-white text-sm font-bold">
+                2
+              </div>
+              <div className="absolute top-0 -ml-10 text-center mt-10 w-32 text-xs font-medium text-teal-600">
+                Address
+              </div>
+            </div>
+            <div className="flex-auto border-t-2 border-gray-300"></div>
+            <div className="flex items-center text-gray-500 relative">
+              <div className="rounded-full h-8 w-8 flex items-center justify-center bg-white border-2 border-gray-300 text-sm font-bold">
+                3
+              </div>
+              <div className="absolute top-0 -ml-10 text-center mt-10 w-32 text-xs font-medium text-gray-500">
+                Payment
+              </div>
+            </div>
+          </div>
         </div>
       </ComponentCard>
     </>

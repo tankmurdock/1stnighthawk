@@ -5,8 +5,12 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import ComponentShowcase from "./components/ComponentShowcase";
 import AnimationGallery from "./components/AnimationGallery";
+import DesignSystem from "./components/DesignSystem";
 import StyleConfigurator from "./components/StyleConfigurator";
 import HawkGallery from "./components/HawkGallery";
+import Testimonials from "./components/Testimonials";
+import Pricing from "./components/Pricing";
+import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
 function App() {
@@ -19,8 +23,12 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/components" element={<ComponentShowcase />} />
           <Route path="/animations" element={<AnimationGallery />} />
+          <Route path="/design-system" element={<DesignSystem />} />
           <Route path="/configurator" element={<StyleConfigurator />} />
           <Route path="/gallery" element={<HawkGallery />} />
+          <Route path="/testimonials" element={<Testimonials />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
 
         <Footer />
@@ -78,6 +86,9 @@ function HomePage() {
           />
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <Testimonials />
 
       {/* Tech Stack Showcase */}
       <section className="py-20 gradient-brand text-white">

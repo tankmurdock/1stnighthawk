@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { ArrowRight, Code, Palette, Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -134,25 +135,29 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center mb-16 md:mb-20 px-4"
           >
-            <motion.button
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 25px 50px -12px rgba(18, 107, 159, 0.35)",
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-primary text-lg md:text-xl px-8 md:px-10 py-4 md:py-5 flex items-center brand-glow w-full sm:w-auto"
-            >
-              View UI Library
-              <ArrowRight className="ml-2 md:ml-3 w-5 h-5 md:w-6 md:h-6" />
-            </motion.button>
+            <Link to="/components">
+              <motion.button
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 25px 50px -12px rgba(18, 107, 159, 0.35)",
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="btn-primary text-lg md:text-xl px-8 md:px-10 py-4 md:py-5 flex items-center brand-glow w-full sm:w-auto"
+              >
+                View UI Library
+                <ArrowRight className="ml-2 md:ml-3 w-5 h-5 md:w-6 md:h-6" />
+              </motion.button>
+            </Link>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="glass px-8 md:px-10 py-4 md:py-5 rounded-lg font-medium text-lg md:text-xl text-gray-700 hover:text-primary-600 transition-colors brand-shadow w-full sm:w-auto"
-            >
-              Design System
-            </motion.button>
+            <Link to="/design-system">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="glass px-8 md:px-10 py-4 md:py-5 rounded-lg font-medium text-lg md:text-xl text-gray-700 hover:text-primary-600 transition-colors brand-shadow w-full sm:w-auto"
+              >
+                Design System
+              </motion.button>
+            </Link>
           </motion.div>
 
           {/* Feature Icons */}

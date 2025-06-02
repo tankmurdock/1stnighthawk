@@ -15,7 +15,7 @@ export default function AnimationGallery() {
   ];
 
   return (
-    <div className="min-h-screen pt-20 pb-12 relative overflow-hidden">
+    <div className="min-h-screen pt-28 pb-12 relative overflow-hidden">
       {/* Animated Background Hawks */}
       <div className="absolute inset-0 pointer-events-none">
         <SoaringHawk
@@ -46,7 +46,7 @@ export default function AnimationGallery() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl md:text-6xl font-bold gradient-text mb-6">
+          <h1 className="text-5xl md:text-6xl font-bold gradient-text mb-8 leading-relaxed py-2">
             Animation Gallery
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">

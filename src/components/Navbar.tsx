@@ -11,8 +11,12 @@ export default function Navbar() {
     { name: "Home", path: "/" },
     { name: "Components", path: "/components" },
     { name: "Animations", path: "/animations" },
+    { name: "Design System", path: "/design-system" },
     { name: "Configurator", path: "/configurator" },
     { name: "Gallery", path: "/gallery" },
+    { name: "Testimonials", path: "/testimonials" },
+    { name: "Pricing", path: "/pricing" },
+    { name: "Contact", path: "/contact" },
   ];
 
   return (
@@ -69,13 +73,15 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-primary"
-            >
-              Get Started
-            </motion.button>
+            <Link to="/contact">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="btn-primary"
+              >
+                Get Started
+              </motion.button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -110,7 +116,9 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <button className="w-full mt-4 btn-primary">Get Started</button>
+            <Link to="/contact">
+              <button className="w-full mt-4 btn-primary">Get Started</button>
+            </Link>
           </motion.div>
         )}
       </div>

@@ -5,43 +5,43 @@ import type { LucideIcon } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 px-4">
       {/* Animated Background Elements with Brand Colors */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary-500/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse-slow"></div>
-        <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-accent-500/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse-slow animation-delay-2000"></div>
-        <div className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-gray-500/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse-slow animation-delay-4000"></div>
+        <div className="absolute top-1/4 left-1/4 w-48 md:w-72 h-48 md:h-72 bg-primary-500/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse-slow"></div>
+        <div className="absolute top-1/3 right-1/4 w-48 md:w-72 h-48 md:h-72 bg-accent-500/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse-slow animation-delay-2000"></div>
+        <div className="absolute bottom-1/4 left-1/2 w-48 md:w-72 h-48 md:h-72 bg-gray-500/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse-slow animation-delay-4000"></div>
       </div>
 
-      {/* Floating Animated Hawks */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Floating Animated Hawks - Hidden on very small screens */}
+      <div className="absolute inset-0 pointer-events-none hidden sm:block">
         <AnimatedHawk
           src="/animated-hawk-1.jpg"
-          className="absolute top-32 left-16 md:left-24 lg:left-32 w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32"
+          className="absolute top-32 left-4 sm:left-16 md:left-24 lg:left-32 w-16 sm:w-20 md:w-28 lg:w-32 h-16 sm:h-20 md:h-28 lg:h-32"
           delay={0}
           direction="left"
         />
         <AnimatedHawk
           src="/animated-hawk-2.jpg"
-          className="absolute top-48 right-16 md:right-24 lg:right-32 w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28"
+          className="absolute top-48 right-4 sm:right-16 md:right-24 lg:right-32 w-12 sm:w-16 md:w-24 lg:w-28 h-12 sm:h-16 md:h-24 lg:h-28"
           delay={1.5}
           direction="right"
         />
         <AnimatedHawk
           src="/animated-hawk-4.jpg"
-          className="absolute bottom-56 left-8 md:left-12 lg:left-20 w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36"
+          className="absolute bottom-56 left-2 sm:left-8 md:left-12 lg:left-20 w-18 sm:w-24 md:w-32 lg:w-36 h-18 sm:h-24 md:h-32 lg:h-36"
           delay={3}
           direction="left"
         />
         <AnimatedHawk
           src="/animated-hawk-5.jpg"
-          className="absolute bottom-32 right-20 md:right-28 lg:right-36 w-18 h-18 md:w-26 md:h-26 lg:w-30 lg:h-30"
+          className="absolute bottom-32 right-4 sm:right-20 md:right-28 lg:right-36 w-14 sm:w-18 md:w-26 lg:w-30 h-14 sm:h-18 md:h-26 lg:h-30"
           delay={4.5}
           direction="right"
         />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto text-center">
         <motion.div
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -57,7 +57,7 @@ export default function Hero() {
               type: "spring",
               stiffness: 200,
             }}
-            className="flex justify-center mb-8 md:mb-12"
+            className="flex justify-center mb-6 sm:mb-8 md:mb-12"
           >
             <div className="relative">
               <motion.video
@@ -65,7 +65,7 @@ export default function Hero() {
                 loop={false}
                 muted
                 playsInline
-                className="h-32 sm:h-40 md:h-56 lg:h-72 xl:h-80 w-auto max-w-none"
+                className="h-24 sm:h-32 md:h-40 lg:h-56 xl:h-72 w-auto max-w-none"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
                 onEnded={(e) => {
@@ -83,7 +83,7 @@ export default function Hero() {
                 <img
                   src="/1st-Nighthawk-logo.png"
                   alt="1st Nighthawk Innovations Logo"
-                  className="h-32 sm:h-40 md:h-56 lg:h-72 xl:h-80 w-auto"
+                  className="h-24 sm:h-32 md:h-40 lg:h-56 xl:h-72 w-auto"
                 />
               </motion.video>
               {/* Enhanced glow effect behind animated logo */}
@@ -97,9 +97,9 @@ export default function Hero() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="inline-flex items-center px-4 md:px-6 py-2 md:py-3 mb-6 md:mb-8 glass rounded-full text-sm md:text-base font-medium text-primary-700 brand-shadow"
+            className="inline-flex items-center px-3 sm:px-4 md:px-6 py-2 md:py-3 mb-4 sm:mb-6 md:mb-8 glass rounded-full text-xs sm:text-sm md:text-base font-medium text-primary-700 brand-shadow"
           >
-            <Zap className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+            <Zap className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-2" />
             Expert UI/UX Design Systems
           </motion.div>
 
@@ -108,7 +108,7 @@ export default function Hero() {
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 md:mb-8 text-shadow"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 md:mb-8 text-shadow leading-tight"
           >
             <span className="gradient-text">Craft</span>
             <br />
@@ -120,7 +120,7 @@ export default function Hero() {
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-700 mb-12 md:mb-16 max-w-5xl mx-auto leading-relaxed px-4"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 mb-8 sm:mb-12 md:mb-16 max-w-5xl mx-auto leading-relaxed"
           >
             Specializing in enterprise-grade UI components and design systems.
             From Material UI to Tailwind CSS, we build cohesive, accessible
@@ -132,27 +132,27 @@ export default function Hero() {
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center mb-16 md:mb-20 px-4"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center items-center mb-12 sm:mb-16 md:mb-20"
           >
-            <Link to="/components">
+            <Link to="/components" className="w-full sm:w-auto">
               <motion.button
                 whileHover={{
                   scale: 1.05,
                   boxShadow: "0 25px 50px -12px rgba(18, 107, 159, 0.35)",
                 }}
                 whileTap={{ scale: 0.95 }}
-                className="btn-primary text-lg md:text-xl px-8 md:px-10 py-4 md:py-5 flex items-center brand-glow w-full sm:w-auto"
+                className="btn-primary text-base sm:text-lg md:text-xl px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 flex items-center justify-center brand-glow w-full"
               >
                 View UI Library
-                <ArrowRight className="ml-2 md:ml-3 w-5 h-5 md:w-6 md:h-6" />
+                <ArrowRight className="ml-2 md:ml-3 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
               </motion.button>
             </Link>
 
-            <Link to="/design-system">
+            <Link to="/design-system" className="w-full sm:w-auto">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="glass px-8 md:px-10 py-4 md:py-5 rounded-lg font-medium text-lg md:text-xl text-gray-700 hover:text-primary-600 transition-colors brand-shadow w-full sm:w-auto"
+                className="glass px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg font-medium text-base sm:text-lg md:text-xl text-gray-700 hover:text-primary-600 transition-colors brand-shadow w-full"
               >
                 Design System
               </motion.button>
@@ -164,7 +164,7 @@ export default function Hero() {
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex justify-center items-center gap-8 md:gap-12 lg:gap-20 px-4"
+            className="flex justify-center items-center gap-4 sm:gap-8 md:gap-12 lg:gap-20"
           >
             <FeatureIcon icon={Code} label="Component Systems" />
             <FeatureIcon icon={Palette} label="Design Tokens" />
@@ -173,21 +173,21 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Floating Elements with Brand Colors */}
+      {/* Floating Elements with Brand Colors - Hidden on mobile */}
       <FloatingElement
-        className="absolute top-1/4 left-12 md:left-16 lg:left-20 w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl brand-shadow"
+        className="absolute top-1/4 left-4 sm:left-12 md:left-16 lg:left-20 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl brand-shadow hidden sm:block"
         delay={0}
       />
       <FloatingElement
-        className="absolute top-1/3 right-12 md:right-16 lg:right-20 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-accent-500 to-accent-600 rounded-full brand-shadow"
+        className="absolute top-1/3 right-4 sm:right-12 md:right-16 lg:right-20 w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-accent-500 to-accent-600 rounded-full brand-shadow hidden sm:block"
         delay={1}
       />
       <FloatingElement
-        className="absolute bottom-1/3 left-32 md:left-40 lg:left-48 w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-gray-600 to-gray-700 rounded-3xl brand-shadow"
+        className="absolute bottom-1/3 left-8 sm:left-32 md:left-40 lg:left-48 w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-br from-gray-600 to-gray-700 rounded-3xl brand-shadow hidden sm:block"
         delay={2}
       />
       <FloatingElement
-        className="absolute bottom-1/3 right-16 md:right-20 lg:right-24 w-16 h-16 md:w-18 md:h-18 bg-gradient-to-br from-primary-600 to-gray-800 rounded-xl brand-shadow"
+        className="absolute bottom-1/3 right-4 sm:right-16 md:right-20 lg:right-24 w-12 h-12 sm:w-16 sm:h-16 md:w-18 md:h-18 bg-gradient-to-br from-primary-600 to-gray-800 rounded-xl brand-shadow hidden sm:block"
         delay={0.5}
       />
     </section>

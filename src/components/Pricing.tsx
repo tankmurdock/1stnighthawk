@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Check, Zap, Crown, Rocket, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -206,6 +206,9 @@ export default function Pricing() {
                 )
               }
               className="relative w-14 h-7 bg-gray-200 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              aria-label={`Switch to ${
+                billingPeriod === "project" ? "monthly retainer" : "per project"
+              } pricing`}
             >
               <motion.div
                 className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-md"

@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Palette, Download, Share } from "lucide-react";
 
+interface ConfigType {
+  primaryColor: string;
+  secondaryColor: string;
+  borderRadius: number;
+  padding: number;
+  fontSize: number;
+  shadow: string;
+  animation: string;
+}
+
 export default function StyleConfigurator() {
   const [selectedComponent, setSelectedComponent] = useState("button");
-  const [config, setConfig] = useState({
+  const [config, setConfig] = useState<ConfigType>({
     primaryColor: "#0ea5e9",
     secondaryColor: "#d946ef",
     borderRadius: 8,
@@ -21,7 +31,10 @@ export default function StyleConfigurator() {
     { id: "modal", name: "Modal", icon: "🪟" },
   ];
 
-  const handleConfigChange = (key: string, value: any) => {
+  const handleConfigChange = (
+    key: keyof ConfigType,
+    value: string | number
+  ) => {
     setConfig((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -94,6 +107,7 @@ export default function StyleConfigurator() {
                       handleConfigChange("primaryColor", e.target.value)
                     }
                     className="w-12 h-12 rounded-lg border-2 border-gray-200"
+                    aria-label="Primary color picker"
                   />
                   <input
                     type="text"
@@ -102,6 +116,7 @@ export default function StyleConfigurator() {
                       handleConfigChange("primaryColor", e.target.value)
                     }
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+                    aria-label="Primary color hex value"
                   />
                 </div>
               </div>
@@ -118,6 +133,7 @@ export default function StyleConfigurator() {
                       handleConfigChange("secondaryColor", e.target.value)
                     }
                     className="w-12 h-12 rounded-lg border-2 border-gray-200"
+                    aria-label="Secondary color picker"
                   />
                   <input
                     type="text"
@@ -126,6 +142,7 @@ export default function StyleConfigurator() {
                       handleConfigChange("secondaryColor", e.target.value)
                     }
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+                    aria-label="Secondary color hex value"
                   />
                 </div>
               </div>
@@ -144,6 +161,7 @@ export default function StyleConfigurator() {
                     handleConfigChange("borderRadius", parseInt(e.target.value))
                   }
                   className="w-full"
+                  aria-label={`Border radius: ${config.borderRadius} pixels`}
                 />
               </div>
 
@@ -161,6 +179,7 @@ export default function StyleConfigurator() {
                     handleConfigChange("padding", parseInt(e.target.value))
                   }
                   className="w-full"
+                  aria-label={`Padding: ${config.padding} pixels`}
                 />
               </div>
 
@@ -178,6 +197,7 @@ export default function StyleConfigurator() {
                     handleConfigChange("fontSize", parseInt(e.target.value))
                   }
                   className="w-full"
+                  aria-label={`Font size: ${config.fontSize} pixels`}
                 />
               </div>
 
@@ -190,6 +210,7 @@ export default function StyleConfigurator() {
                   value={config.shadow}
                   onChange={(e) => handleConfigChange("shadow", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  aria-label="Shadow style selection"
                 >
                   <option value="none">None</option>
                   <option value="small">Small</option>
@@ -210,6 +231,7 @@ export default function StyleConfigurator() {
                     handleConfigChange("animation", e.target.value)
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  aria-label="Hover animation selection"
                 >
                   <option value="none">None</option>
                   <option value="hover-scale">Scale</option>
@@ -225,7 +247,11 @@ export default function StyleConfigurator() {
                   <Download className="w-4 h-4 mr-2" />
                   Export CSS
                 </button>
-                <button className="btn-secondary">
+                <button
+                  className="btn-secondary"
+                  title="Share configuration"
+                  aria-label="Share configuration"
+                >
                   <Share className="w-4 h-4" />
                 </button>
               </div>
@@ -298,7 +324,7 @@ function ComponentPreview({
   isDark = false,
 }: {
   selectedComponent: string;
-  config: any;
+  config: ConfigType;
   isDark?: boolean;
 }) {
   const baseStyles = {
@@ -439,7 +465,7 @@ function ComponentPreview({
   return null;
 }
 
-function generateCSS(component: string, config: any) {
+function generateCSS(component: string, config: ConfigType) {
   const shadow = () => {
     switch (config.shadow) {
       case "small":

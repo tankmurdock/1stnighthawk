@@ -1,18 +1,16 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import {
   Palette,
   Type,
-  Box,
-  Zap,
-  Grid3X3,
+  Grid,
   Eye,
-  Download,
-  Copy,
-  CheckCircle,
-  Layers,
-  Sparkles,
+  Zap,
   Target,
+  CheckCircle,
+  Copy,
+  Box,
+  Sparkles,
 } from "lucide-react";
 
 export default function DesignSystem() {
@@ -22,10 +20,10 @@ export default function DesignSystem() {
   const tabs = [
     { id: "colors", label: "Colors", icon: Palette },
     { id: "typography", label: "Typography", icon: Type },
-    { id: "components", label: "Components", icon: Box },
-    { id: "layout", label: "Layout", icon: Grid3X3 },
+    { id: "components", label: "Components", icon: Grid },
+    { id: "layout", label: "Layout", icon: Grid },
     { id: "animations", label: "Animations", icon: Zap },
-    { id: "patterns", label: "Patterns", icon: Layers },
+    { id: "patterns", label: "Patterns", icon: Grid },
   ];
 
   const copyToClipboard = async (code: string, label: string) => {
@@ -131,32 +129,30 @@ export default function DesignSystem() {
         </motion.div>
 
         {/* Tab Content */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-          >
-            {activeTab === "colors" && (
-              <ColorsTab
-                copyToClipboard={copyToClipboard}
-                copiedCode={copiedCode}
-              />
-            )}
-            {activeTab === "typography" && (
-              <TypographyTab
-                copyToClipboard={copyToClipboard}
-                copiedCode={copiedCode}
-              />
-            )}
-            {activeTab === "components" && <ComponentsTab />}
-            {activeTab === "layout" && <LayoutTab />}
-            {activeTab === "animations" && <AnimationsTab />}
-            {activeTab === "patterns" && <PatternsTab />}
-          </motion.div>
-        </AnimatePresence>
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.4 }}
+        >
+          {activeTab === "colors" && (
+            <ColorsTab
+              copyToClipboard={copyToClipboard}
+              copiedCode={copiedCode}
+            />
+          )}
+          {activeTab === "typography" && (
+            <TypographyTab
+              copyToClipboard={copyToClipboard}
+              copiedCode={copiedCode}
+            />
+          )}
+          {activeTab === "components" && <ComponentsTab />}
+          {activeTab === "layout" && <LayoutTab />}
+          {activeTab === "animations" && <AnimationsTab />}
+          {activeTab === "patterns" && <PatternsTab />}
+        </motion.div>
       </div>
     </div>
   );
@@ -404,12 +400,20 @@ function ComponentsTab() {
             type="text"
             placeholder="Text Input"
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            aria-label="Sample text input"
           />
-          <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+          <select
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+            aria-label="Sample select dropdown"
+          >
             <option>Select Option</option>
           </select>
           <div className="flex items-center space-x-2">
-            <input type="checkbox" className="rounded text-primary-500" />
+            <input
+              type="checkbox"
+              className="rounded text-primary-500"
+              aria-label="Sample checkbox"
+            />
             <label className="text-sm">Checkbox</label>
           </div>
         </div>

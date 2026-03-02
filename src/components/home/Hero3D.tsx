@@ -1,11 +1,10 @@
-import { useRef, useMemo, useEffect } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useRef, useMemo } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
 function ParticleField({ mousePosition }: { mousePosition: { x: number; y: number } }) {
   const ref = useRef<THREE.Points>(null);
-  const { viewport } = useThree();
 
   const count = 3000;
 
@@ -69,6 +68,7 @@ function ParticleField({ mousePosition }: { mousePosition: { x: number; y: numbe
           count={count}
           array={positions}
           itemSize={3}
+          args={[positions, 3]}
         />
       </bufferGeometry>
       <PointMaterial
@@ -117,6 +117,7 @@ function AccentParticles({ mousePosition }: { mousePosition: { x: number; y: num
           count={count}
           array={positions}
           itemSize={3}
+          args={[positions, 3]}
         />
       </bufferGeometry>
       <PointMaterial

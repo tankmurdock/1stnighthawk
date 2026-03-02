@@ -1,152 +1,80 @@
 # 1st Nighthawk Innovations
 
-A cutting-edge showcase website for modern web development services, featuring interactive components, animations, and a real-time style configurator.
+A dark, cinematic portfolio website featuring a 3D WebGL hero, GSAP scroll-linked animations, Lenis smooth scrolling, and immersive page transitions. Built to showcase premium UI/UX design services.
 
-## 🚀 Features
+## Tech Stack
 
-- **Component Showcase**: Interactive gallery of modern UI components
-- **Animation Gallery**: Smooth, engaging animations and micro-interactions
-- **Style Configurator**: Real-time component customization with live preview
-- **Modern Design**: Glass morphism, gradients, and cutting-edge visual effects
-- **Responsive**: Fully responsive design that works on all devices
-- **Fast Performance**: Built with Vite and optimized for speed
+- **React 19** with TypeScript
+- **Vite 6** -- Build tool and dev server
+- **Three.js** + React Three Fiber + Drei -- 3D particle hero scene
+- **GSAP** + ScrollTrigger -- Scroll-linked animations, horizontal scroll pinning
+- **Lenis** -- Smooth scroll engine
+- **Framer Motion** -- Page transitions, micro-interactions
+- **Tailwind CSS 4** -- Utility-first styling with custom dark theme tokens
+- **Lucide React** -- Icons
+- **React Router** -- Client-side routing
 
-## 🛠️ Tech Stack
+## Routes
 
-- **React 18** - Modern React with hooks and concurrent features
-- **TypeScript** - Type-safe development
-- **Vite** - Lightning-fast build tool and dev server
-- **Framer Motion** - Production-ready motion library for React
-- **Tailwind CSS** - Utility-first CSS framework
-- **Lucide React** - Beautiful & customizable SVG icons
-- **React Router** - Declarative routing for React
+| Route | Page | Description |
+|-------|------|-------------|
+| `/` | Home | Immersive scroll: 3D Hero -> Services -> Featured Work (horizontal scroll) -> Testimonials Marquee -> CTA |
+| `/work` | Portfolio | Project grid with category filtering, clip-path reveals, case study modals |
+| `/contact` | Contact | Animated form with floating labels, budget selector |
 
-## 🎨 Design Features
-
-- Custom color palette with primary/accent colors
-- Glass morphism effects with backdrop blur
-- Smooth animations and transitions
-- Floating elements and interactive components
-- Gradient backgrounds and text effects
-- Custom scrollbar styling
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
-├── components/
-│   ├── Navbar.tsx          # Navigation with glass morphism
-│   ├── Hero.tsx            # Hero section with floating elements
-│   ├── ComponentShowcase.tsx # Interactive component gallery
-│   ├── AnimationGallery.tsx   # Animation examples and demos
-│   ├── StyleConfigurator.tsx  # Real-time style customization
-│   └── Footer.tsx          # Footer with company info
-├── lib/
-│   └── utils.ts            # Utility functions and style helpers
-├── App.tsx                 # Main app component with routing
-├── index.css              # Global styles and Tailwind imports
-└── main.tsx               # App entry point
+  components/
+    layout/         -- Navbar, Footer, SmoothScroll, CustomCursor, PageTransition, Preloader
+    home/           -- Hero3D, HeroContent, Services, FeaturedWork, TestimonialsMarquee, HomeCTA
+    work/           -- (future: extracted project components)
+    contact/        -- (future: extracted form components)
+    shared/         -- TextReveal, MagneticButton, ScrollProgress, NoiseOverlay
+  hooks/            -- useMousePosition, useScrollProgress, useMagnetic
+  pages/            -- HomePage, WorkPage, ContactPage
+  lib/              -- Utility functions (cn)
+  App.tsx           -- Root with 3-route structure + AnimatePresence
+  index.css         -- Dark theme tokens, typography, component classes
+  main.tsx          -- Entry point
 ```
 
-## 🚀 Getting Started
+## Design System
 
-1. **Install dependencies**
+- **Theme**: Dark cinematic (`#070a20` navy base)
+- **Typography**: Syne (display headings) + Inter (body)
+- **Colors**: Brand navy, primary blue (`#126b9f`), accent teal
+- **Effects**: Glass morphism, noise overlay, gradient text, glow effects
+- **Animations**: Text reveals, clip-path reveals, scroll-triggered, parallax
 
-   ```bash
-   npm install
-   ```
+## Getting Started
 
-2. **Start development server**
+```bash
+npm install
+npm run dev
+```
 
-   ```bash
-   npm run dev
-   ```
+## Build
 
-3. **Build for production**
+```bash
+npm run build
+npm run preview
+```
 
-   ```bash
-   npm run build
-   ```
+## Key Features
 
-4. **Preview production build**
-   ```bash
-   npm run preview
-   ```
-
-## 🎯 Key Components
-
-### Component Showcase
-
-- **Buttons**: Various button styles with hover effects
-- **Cards**: Glass cards, product cards, feature cards
-- **Forms**: Modern inputs, toggles, search bars
-- **Navigation**: Tabs, breadcrumbs, progress bars
-- **Modals**: Alerts, notifications, loading spinners
-
-### Animation Gallery
-
-- **Entrance Animations**: Fade, slide, scale, bounce effects
-- **Hover Effects**: Scale, rotate, glow, bounce interactions
-- **Scroll Triggered**: Viewport-based animations
-- **Loading Animations**: Spinners, pulses, dots, waves
-- **Transitions**: Layout animations and morphing shapes
-
-### Style Configurator
-
-- Real-time color customization
-- Adjustable border radius, padding, font size
-- Shadow effects (none, small, medium, large, colored)
-- Hover animations (scale, lift, glow, rotate)
-- Live CSS code generation
-- Dark/light theme preview
-
-## 🎨 Customization
-
-The project uses a comprehensive design system with:
-
-- **Colors**: Primary (blue tones) and accent (purple/pink tones)
-- **Animations**: Custom keyframes for various effects
-- **Utilities**: Glass morphism, gradients, shadows
-- **Typography**: Inter font family with smooth rendering
-
-## 🌟 Business Concept
-
-This website serves as a digital showroom for web development services, allowing customers to:
-
-1. **Explore** modern UI components and animations
-2. **Customize** styling and see real-time previews
-3. **Visualize** their project requirements
-4. **Select** specific elements for their website/app
-5. **Connect** with the development team for implementation
-
-## 📱 Responsive Design
-
-- Mobile-first approach
-- Fluid typography and spacing
-- Touch-friendly interactions
-- Optimized layouts for all screen sizes
-
-## ⚡ Performance
-
-- Optimized animations with `will-change` and GPU acceleration
-- Lazy loading and code splitting
-- Minimal bundle size with tree shaking
-- Fast initial page load with Vite
-
-## 🔧 Development
-
-The codebase follows modern React patterns:
-
-- Functional components with hooks
-- TypeScript for type safety
-- Component composition
-- Custom utility functions
-- Responsive design principles
-
-## 📄 License
-
-© 2024 1st Nighthawk Innovations. All rights reserved.
+- **3D Particle Hero** -- React Three Fiber particle cloud that reacts to mouse movement
+- **GSAP Horizontal Scroll** -- Featured work section pins and scrolls horizontally
+- **Custom Cursor** -- Dot + ring cursor with hover scaling, hidden on touch devices
+- **Lenis Smooth Scroll** -- Integrated with GSAP ScrollTrigger for buttery scroll
+- **Text Reveal Animations** -- Word-by-word and character reveal on scroll
+- **Testimonials Marquee** -- Infinite horizontal scroll with pause on hover
+- **Preloader** -- Branded loading screen with progress indicator
+- **Page Transitions** -- Framer Motion enter/exit between routes
+- **Noise Overlay** -- SVG film grain for cinematic texture
+- **Scroll Progress** -- Gradient progress bar at viewport top
 
 ---
 
-Built with ❤️ using modern web technologies to showcase the future of web development.
+(c) 2024 1st Nighthawk Innovations. All rights reserved.

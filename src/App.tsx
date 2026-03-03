@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import SmoothScroll from "./components/layout/SmoothScroll";
+import SmoothScroll, { useLenis } from "./components/layout/SmoothScroll";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import CustomCursor from "./components/layout/CustomCursor";
@@ -15,9 +15,14 @@ import ContactPage from "./pages/ContactPage";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
+  const lenis = useLenis();
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, lenis]);
   return null;
 }
 
@@ -65,8 +70,8 @@ function App() {
 
   return (
     <Router>
-      <ScrollToTop />
       <SmoothScroll>
+        <ScrollToTop />
         <div className="min-h-screen bg-brand-navy">
           <Preloader onComplete={handleIntroComplete} />
           <CustomCursor />

@@ -5,7 +5,6 @@ import { Menu, X } from "lucide-react";
 
 const navItems = [
   { name: "Work", path: "/work" },
-  { name: "Contact", path: "/contact" },
 ];
 
 interface NavbarProps {

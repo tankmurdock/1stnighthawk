@@ -12,12 +12,12 @@ import React from "react";
    ═══════════════════════════════════════════════════════════ */
 function CorporateRebrand() {
   return (
-    <div className="w-full h-full bg-[#08090e] text-white flex flex-col overflow-hidden select-none relative" style={{ fontSize: "1px" }}>
+    <div className="w-full h-full bg-[#08090e] text-white flex flex-col overflow-hidden select-none relative" style={{ fontSize: "1.6px" }}>
       {/* Subtle radial glow */}
       <div className="absolute top-0 right-0 w-[60%] h-[40%] bg-amber-500/[0.04] rounded-full blur-[40px]" />
 
       {/* ── Nav ── */}
-      <div className="flex items-center justify-between px-[14em] py-[8em] relative z-10">
+      <div className="flex items-center justify-between px-[9em] py-[8em] relative z-10">
         <div className="flex items-center gap-[4em]">
           <div className="w-[10em] h-[10em] rounded-[2em] bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center">
             <div className="w-[4em] h-[4em] bg-[#08090e] rounded-[1em]" />
@@ -35,11 +35,11 @@ function CorporateRebrand() {
       </div>
 
       {/* ── Hero ── */}
-      <div className="px-[14em] pt-[12em] pb-[16em] relative z-10">
+      <div className="px-[9em] pt-[12em] pb-[16em] relative z-10">
         <div className="flex gap-[14em]">
           <div className="flex-1">
             <span className="text-[5em] tracking-[0.4em] uppercase text-amber-400/70 block mb-[6em]">Enterprise Solutions</span>
-            <div className="font-display text-[18em] font-bold leading-[1.05] tracking-[0.02em] mb-[8em]">
+            <div className="font-display text-[13em] font-bold leading-[1.05] tracking-[0.02em] mb-[8em]">
               <span className="text-white">Accelerate </span>
               <span className="text-amber-400">Growth</span>
               <br />
@@ -73,7 +73,7 @@ function CorporateRebrand() {
       </div>
 
       {/* ── Trusted By logos ── */}
-      <div className="px-[14em] py-[10em] border-t border-white/[0.04] relative z-10">
+      <div className="px-[9em] py-[10em] border-t border-white/[0.04] relative z-10">
         <span className="text-[4.5em] tracking-[0.3em] uppercase text-gray-700 block mb-[6em]">Trusted by industry leaders</span>
         <div className="flex items-center gap-[16em]">
           {["ORACLE", "DELOITTE", "ADOBE", "STRIPE", "NOTION"].map((logo) => (
@@ -83,7 +83,7 @@ function CorporateRebrand() {
       </div>
 
       {/* ── Features Grid ── */}
-      <div className="px-[14em] py-[14em] relative z-10">
+      <div className="px-[9em] py-[8em] relative z-10">
         <div className="flex items-end justify-between mb-[10em]">
           <div>
             <span className="text-[5em] tracking-[0.4em] uppercase text-amber-400/60 block mb-[4em]">What We Deliver</span>
@@ -109,7 +109,7 @@ function CorporateRebrand() {
       </div>
 
       {/* ── Stats bar ── */}
-      <div className="px-[14em] py-[10em] bg-amber-500/[0.03] border-y border-amber-500/[0.06] relative z-10">
+      <div className="px-[9em] py-[10em] bg-amber-500/[0.03] border-y border-amber-500/[0.06] relative z-10">
         <div className="flex justify-between">
           {[
             { val: "12", label: "Sub-brands Unified" },
@@ -126,9 +126,9 @@ function CorporateRebrand() {
       </div>
 
       {/* ── Testimonial ── */}
-      <div className="px-[14em] py-[12em] relative z-10">
+      <div className="px-[9em] py-[12em] relative z-10">
         <div className="max-w-[70%]">
-          <span className="text-[16em] text-amber-500/20 font-serif leading-none block">"</span>
+          <span className="text-[12em] text-amber-500/20 font-serif leading-none block">"</span>
           <p className="text-[6em] text-gray-400 leading-[1.6] italic -mt-[8em] mb-[6em]">
             Axiom transformed our entire brand ecosystem. The results
             exceeded every metric we set.
@@ -144,7 +144,7 @@ function CorporateRebrand() {
       </div>
 
       {/* ── Footer ── */}
-      <div className="mt-auto px-[14em] py-[10em] border-t border-white/[0.04] flex items-center justify-between relative z-10">
+      <div className="mt-auto px-[9em] py-[10em] border-t border-white/[0.04] flex items-center justify-between relative z-10">
         <span className="font-display text-[5em] tracking-[0.3em] text-gray-700 uppercase">© 2024 Axiom Corp</span>
         <div className="flex gap-[10em]">
           {["Privacy", "Terms", "Careers", "Contact"].map((l) => (
@@ -163,12 +163,12 @@ function CorporateRebrand() {
 function TechStartup() {
   const bars = [28, 45, 38, 62, 52, 70, 44, 82, 58, 75, 88, 65, 78, 92, 85, 72, 90, 76, 84, 95, 80, 68, 86, 74];
   return (
-    <div className="w-full h-full bg-[#030712] text-white flex flex-col overflow-hidden select-none relative" style={{ fontSize: "1px" }}>
+    <div className="w-full h-full bg-[#030712] text-white flex flex-col overflow-hidden select-none relative" style={{ fontSize: "1.6px" }}>
       {/* BG glow */}
       <div className="absolute top-[20%] left-[30%] w-[40%] h-[30%] bg-emerald-500/[0.03] rounded-full blur-[40px]" />
 
       {/* ── Nav ── */}
-      <div className="flex items-center justify-between px-[14em] py-[8em] border-b border-white/[0.04] relative z-10">
+      <div className="flex items-center justify-between px-[9em] py-[8em] border-b border-white/[0.04] relative z-10">
         <div className="flex items-center gap-[20em]">
           <div className="flex items-center gap-[4em]">
             <div className="w-[8em] h-[8em] rounded-full bg-emerald-400" />
@@ -189,12 +189,12 @@ function TechStartup() {
       </div>
 
       {/* ── Hero ── */}
-      <div className="px-[14em] pt-[16em] pb-[10em] text-center relative z-10">
+      <div className="px-[9em] pt-[16em] pb-[10em] text-center relative z-10">
         <div className="inline-flex items-center gap-[4em] border border-emerald-500/20 rounded-full px-[8em] py-[3em] mb-[8em]">
           <div className="w-[4em] h-[4em] rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-[4.5em] text-emerald-400 tracking-[0.1em]">Now in Public Beta</span>
         </div>
-        <div className="font-display text-[18em] font-bold leading-[1.05] mb-[6em]">
+        <div className="font-display text-[13em] font-bold leading-[1.05] mb-[6em]">
           <span className="text-white">Analytics that</span>
           <br />
           <span style={{
@@ -307,7 +307,7 @@ function TechStartup() {
       </div>
 
       {/* ── Social Proof ── */}
-      <div className="px-[14em] py-[10em] relative z-10">
+      <div className="px-[9em] py-[10em] relative z-10">
         <div className="flex items-center justify-center gap-[16em]">
           {["Y COMBINATOR", "TECHCRUNCH", "PRODUCTHUNT", "FORBES"].map((n) => (
             <span key={n} className="font-display text-[5em] tracking-[0.2em] text-gray-700/50 font-bold">{n}</span>
@@ -316,7 +316,7 @@ function TechStartup() {
       </div>
 
       {/* ── Footer ── */}
-      <div className="mt-auto px-[14em] py-[8em] border-t border-white/[0.04] flex items-center justify-between relative z-10">
+      <div className="mt-auto px-[9em] py-[8em] border-t border-white/[0.04] flex items-center justify-between relative z-10">
         <span className="text-[4.5em] text-gray-700">© 2024 Nexus Technologies</span>
         <div className="flex gap-[8em]">
           {["Docs", "Status", "Security", "GitHub"].map((l) => (
@@ -334,9 +334,9 @@ function TechStartup() {
    ═══════════════════════════════════════════════════════════ */
 function CreativePortfolio() {
   return (
-    <div className="w-full h-full bg-[#f5f0ea] text-[#1a1a1a] flex flex-col overflow-hidden select-none" style={{ fontSize: "1px" }}>
+    <div className="w-full h-full bg-[#f5f0ea] text-[#1a1a1a] flex flex-col overflow-hidden select-none" style={{ fontSize: "1.6px" }}>
       {/* ── Nav ── */}
-      <div className="flex items-center justify-between px-[14em] py-[8em] border-b border-[#1a1a1a]/[0.06]">
+      <div className="flex items-center justify-between px-[9em] py-[8em] border-b border-[#1a1a1a]/[0.06]">
         <span className="font-display text-[8em] tracking-[0.35em] uppercase font-bold text-[#1a1a1a]">Studio Miro</span>
         <div className="flex items-center gap-[12em]">
           {["Work", "About", "Journal", "Contact"].map((t) => (
@@ -350,11 +350,11 @@ function CreativePortfolio() {
       </div>
 
       {/* ── Hero ── */}
-      <div className="px-[14em] pt-[18em] pb-[12em]">
+      <div className="px-[9em] pt-[18em] pb-[12em]">
         <div className="flex items-end justify-between mb-[10em]">
           <div>
             <span className="text-[5em] tracking-[0.4em] uppercase text-[#999] block mb-[5em]">Creative Studio — Est. 2019</span>
-            <div className="font-display text-[22em] font-bold leading-[1.0] tracking-[-0.02em]">
+            <div className="font-display text-[14em] font-bold leading-[1.0] tracking-[-0.02em]">
               <span className="text-[#1a1a1a]">We craft</span>
               <br />
               <span className="italic text-[#c9a87c]">timeless</span>
@@ -370,7 +370,7 @@ function CreativePortfolio() {
       </div>
 
       {/* ── Featured Projects Grid ── */}
-      <div className="px-[14em] pb-[12em]">
+      <div className="px-[9em] pb-[12em]">
         <div className="flex items-center justify-between mb-[8em]">
           <span className="text-[5em] tracking-[0.3em] uppercase text-[#999]">Selected Work</span>
           <span className="text-[5em] text-[#c9a87c] tracking-[0.1em]">View Archive →</span>
@@ -410,7 +410,7 @@ function CreativePortfolio() {
       </div>
 
       {/* ── About Strip ── */}
-      <div className="px-[14em] py-[12em] bg-[#1a1a1a]">
+      <div className="px-[9em] py-[12em] bg-[#1a1a1a]">
         <div className="flex items-start gap-[14em]">
           <div className="flex-1">
             <span className="text-[5em] tracking-[0.3em] uppercase text-[#c9a87c] block mb-[6em]">About the Studio</span>
@@ -436,7 +436,7 @@ function CreativePortfolio() {
       </div>
 
       {/* ── Testimonial ── */}
-      <div className="px-[14em] py-[10em]">
+      <div className="px-[9em] py-[10em]">
         <p className="text-[6.5em] italic text-[#666] leading-[1.5] mb-[6em]">
           "Miro brought a level of craft and intentionality that elevated our entire brand presence."
         </p>
@@ -444,7 +444,7 @@ function CreativePortfolio() {
       </div>
 
       {/* ── Footer ── */}
-      <div className="mt-auto px-[14em] py-[8em] border-t border-[#1a1a1a]/[0.08] flex items-center justify-between">
+      <div className="mt-auto px-[9em] py-[8em] border-t border-[#1a1a1a]/[0.08] flex items-center justify-between">
         <span className="text-[4.5em] text-[#bbb] tracking-[0.2em]">© Studio Miro 2024</span>
         <div className="flex gap-[8em]">
           {["Instagram", "Behance", "Dribbble", "LinkedIn"].map((s) => (
@@ -462,12 +462,12 @@ function CreativePortfolio() {
    ═══════════════════════════════════════════════════════════ */
 function FitnessApp() {
   return (
-    <div className="w-full h-full bg-[#0a0a0f] text-white flex flex-col overflow-hidden select-none relative" style={{ fontSize: "1px" }}>
+    <div className="w-full h-full bg-[#0a0a0f] text-white flex flex-col overflow-hidden select-none relative" style={{ fontSize: "1.6px" }}>
       {/* BG gradient */}
       <div className="absolute top-[10%] left-[40%] w-[50%] h-[40%] bg-violet-600/[0.06] rounded-full blur-[40px]" />
 
       {/* ── Nav ── */}
-      <div className="flex items-center justify-between px-[14em] py-[8em] relative z-10">
+      <div className="flex items-center justify-between px-[9em] py-[8em] relative z-10">
         <div className="flex items-center gap-[4em]">
           <svg viewBox="0 0 24 24" className="w-[10em] h-[10em]" fill="none">
             <circle cx="12" cy="12" r="10" stroke="#a78bfa" strokeWidth="1.5" />
@@ -486,12 +486,12 @@ function FitnessApp() {
       </div>
 
       {/* ── Hero with phone mockup ── */}
-      <div className="px-[14em] pt-[10em] flex gap-[12em] relative z-10">
+      <div className="px-[9em] pt-[10em] flex gap-[12em] relative z-10">
         <div className="flex-1 pt-[8em]">
           <div className="inline-flex items-center gap-[3em] bg-violet-500/10 rounded-full px-[6em] py-[2.5em] mb-[8em]">
             <span className="text-[4.5em] text-violet-400">★ #1 Fitness App 2024</span>
           </div>
-          <div className="font-display text-[16em] font-bold leading-[1.05] mb-[6em]">
+          <div className="font-display text-[12em] font-bold leading-[1.05] mb-[6em]">
             <span className="text-white">Train</span>
             <br />
             <span className="text-violet-400">Smarter,</span>
@@ -613,7 +613,7 @@ function FitnessApp() {
       </div>
 
       {/* ── Features ── */}
-      <div className="px-[14em] py-[12em] relative z-10">
+      <div className="px-[9em] py-[12em] relative z-10">
         <div className="grid grid-cols-3 gap-[6em]">
           {[
             { icon: "⚡", title: "AI Coaching", desc: "Personalized plans that evolve with your progress" },
@@ -630,7 +630,7 @@ function FitnessApp() {
       </div>
 
       {/* ── Footer ── */}
-      <div className="mt-auto px-[14em] py-[8em] border-t border-white/[0.04] flex items-center justify-between relative z-10">
+      <div className="mt-auto px-[9em] py-[8em] border-t border-white/[0.04] flex items-center justify-between relative z-10">
         <span className="text-[4.5em] text-gray-700">© 2024 Pulse Fitness Inc.</span>
         <div className="flex gap-[8em]">
           {["Privacy", "Terms", "Support"].map((l) => (
@@ -648,7 +648,7 @@ function FitnessApp() {
    ═══════════════════════════════════════════════════════════ */
 function AdventureBrand() {
   return (
-    <div className="w-full h-full bg-[#080f08] text-white flex flex-col overflow-hidden select-none relative" style={{ fontSize: "1px" }}>
+    <div className="w-full h-full bg-[#080f08] text-white flex flex-col overflow-hidden select-none relative" style={{ fontSize: "1.6px" }}>
       {/* Topo pattern */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2322c55e' stroke-width='0.4'%3E%3Cpath d='M30 5c14 0 25 11 25 25s-11 25-25 25S5 44 5 30 16 5 30 5z'/%3E%3Cpath d='M30 15c8 0 15 7 15 15s-7 15-15 15-15-7-15-15 7-15 15-15z'/%3E%3Cpath d='M30 25c3 0 5 2 5 5s-2 5-5 5-5-2-5-5 2-5 5-5z'/%3E%3C/g%3E%3C/svg%3E")`,
@@ -657,7 +657,7 @@ function AdventureBrand() {
       <div className="absolute inset-0 bg-gradient-to-b from-[#080f08] via-transparent to-[#080f08]" />
 
       {/* ── Nav ── */}
-      <div className="flex items-center justify-between px-[14em] py-[8em] relative z-10 border-b border-green-500/[0.06]">
+      <div className="flex items-center justify-between px-[9em] py-[8em] relative z-10 border-b border-green-500/[0.06]">
         <div className="flex items-center gap-[4em]">
           <svg viewBox="0 0 24 24" className="w-[10em] h-[10em]" fill="none" stroke="#22c55e" strokeWidth="1.5">
             <path d="M12 2L2 19h20L12 2z" />
@@ -684,9 +684,9 @@ function AdventureBrand() {
           <path d="M0 100 L60 40 L100 65 L160 20 L220 55 L280 30 L340 50 L400 25 L400 100Z" fill="#080f08" />
         </svg>
         {/* Hero text overlay */}
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-center z-10 px-[14em]">
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center z-10 px-[9em]">
           <span className="text-[5em] tracking-[0.5em] uppercase text-green-400/60 mb-[6em]">Spring / Summer 2024</span>
-          <div className="font-display text-[24em] font-bold leading-[0.95] tracking-[-0.02em] mb-[6em]">
+          <div className="font-display text-[12em] font-bold leading-[0.95] tracking-[-0.02em] mb-[6em]">
             <span className="text-white">INTO THE</span>
             <br />
             <span style={{
@@ -705,7 +705,7 @@ function AdventureBrand() {
       </div>
 
       {/* ── Product Cards ── */}
-      <div className="px-[14em] py-[10em] relative z-10">
+      <div className="px-[9em] py-[10em] relative z-10">
         <div className="flex items-center justify-between mb-[8em]">
           <span className="text-[5em] tracking-[0.3em] uppercase text-gray-600">New Arrivals</span>
           <span className="text-[5em] text-green-400 tracking-[0.1em]">View All →</span>
@@ -750,7 +750,7 @@ function AdventureBrand() {
       </div>
 
       {/* ── Instagram-style feed ── */}
-      <div className="px-[14em] py-[10em] relative z-10">
+      <div className="px-[9em] py-[10em] relative z-10">
         <span className="text-[5em] tracking-[0.3em] uppercase text-gray-600 block mb-[6em]">@basecampco</span>
         <div className="grid grid-cols-6 gap-[2em]">
           {[
@@ -767,7 +767,7 @@ function AdventureBrand() {
       </div>
 
       {/* ── Footer ── */}
-      <div className="mt-auto px-[14em] py-[8em] border-t border-white/[0.04] relative z-10">
+      <div className="mt-auto px-[9em] py-[8em] border-t border-white/[0.04] relative z-10">
         <div className="flex justify-between items-start mb-[8em]">
           <div>
             <span className="font-display text-[6em] tracking-[0.3em] uppercase text-gray-500 block mb-[4em]">Basecamp Co.</span>

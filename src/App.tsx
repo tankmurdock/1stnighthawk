@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import SmoothScroll from "./components/layout/SmoothScroll";
@@ -12,6 +12,14 @@ import ScrollProgress from "./components/shared/ScrollProgress";
 import HomePage from "./pages/HomePage";
 import WorkPage from "./pages/WorkPage";
 import ContactPage from "./pages/ContactPage";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -57,6 +65,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <SmoothScroll>
         <div className="min-h-screen bg-brand-navy">
           <Preloader onComplete={handleIntroComplete} />

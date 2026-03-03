@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import TextReveal from "../shared/TextReveal";
+import { projectPreviews } from "./ProjectPreviews";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,36 +14,31 @@ const projects = [
     id: 1,
     title: "Corporate Rebrand",
     category: "Brand Identity",
-    image: "/gallery/corporate-1.jpg",
-    color: "#126b9f",
+    color: "#d97706",
   },
   {
     id: 2,
     title: "Tech Startup Platform",
     category: "Web Development",
-    image: "/gallery/tech-1.jpg",
-    color: "#14b8a6",
+    color: "#34d399",
   },
   {
     id: 3,
     title: "Creative Portfolio",
     category: "UI/UX Design",
-    image: "/gallery/creative-1.jpg",
-    color: "#38bdf8",
+    color: "#c9a87c",
   },
   {
     id: 4,
     title: "Fitness App",
     category: "App Design",
-    image: "/gallery/fitness-1.jpg",
-    color: "#0d9488",
+    color: "#a78bfa",
   },
   {
     id: 5,
     title: "Adventure Brand",
     category: "Brand Identity",
-    image: "/gallery/adventure-1.jpg",
-    color: "#126b9f",
+    color: "#22c55e",
   },
 ];
 
@@ -76,19 +72,19 @@ export default function FeaturedWork() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden">
-      <div className="py-20 px-6 lg:px-8 max-w-7xl mx-auto mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+    <section ref={sectionRef} className="relative h-screen flex flex-col justify-center overflow-hidden">
+      <div className="px-6 lg:px-8 max-w-7xl mx-auto mb-6 w-full">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <TextReveal
             as="h2"
-            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white"
+            className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white"
             stagger={0.05}
           >
             Featured Work
           </TextReveal>
           <Link
             to="/work"
-            className="text-gray-400 hover:text-white transition-colors text-sm uppercase tracking-wider link-underline w-fit flex items-center gap-2"
+            className="font-sans text-gray-500 hover:text-white transition-colors text-sm uppercase tracking-[3px] link-underline w-fit flex items-center gap-2"
           >
             View All
             <ArrowUpRight className="w-4 h-4" />
@@ -96,7 +92,7 @@ export default function FeaturedWork() {
         </div>
       </div>
 
-      <div ref={trackRef} className="flex gap-6 pl-6 lg:pl-8 pr-[30vw]">
+      <div ref={trackRef} className="flex gap-6 pl-6 lg:pl-8 pr-[30vw] items-start">
         {projects.map((project, i) => (
           <ProjectSlide key={project.id} project={project} index={i} />
         ))}
@@ -114,56 +110,33 @@ function ProjectSlide({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true });
+  const Preview = projectPreviews[project.id];
 
   return (
     <motion.div
       ref={ref}
-      className="flex-shrink-0 w-[80vw] sm:w-[60vw] md:w-[45vw] lg:w-[35vw] group cursor-pointer"
+      className="flex-shrink-0 w-[75vw] sm:w-[50vw] md:w-[38vw] lg:w-[30vw] group cursor-pointer"
       whileHover={{ y: -8 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      <div className="relative aspect-[4/5] rounded-2xl overflow-hidden mb-6">
+      <div className="relative aspect-[3/4] rounded-lg overflow-hidden border border-white/[0.06] group-hover:border-white/[0.12] transition-colors duration-500">
         <motion.div
           initial={{ clipPath: "inset(100% 0 0 0)" }}
           animate={isInView ? { clipPath: "inset(0% 0 0 0)" } : undefined}
           transition={{ duration: 0.8, delay: index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
           className="absolute inset-0"
         >
-          <div
-            className="absolute inset-0 bg-gradient-to-br opacity-40"
-            style={{
-              background: `linear-gradient(135deg, ${project.color}40, ${project.color}10)`,
-            }}
-          />
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-            }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(135deg, ${project.color}60, transparent 60%)`,
-            }}
-          />
+          {Preview && <Preview />}
         </motion.div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={isInView ? { y: 0, opacity: 1 } : undefined}
-            transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-          >
-            <span className="text-xs uppercase tracking-wider text-gray-300 mb-2 block">
-              {project.category}
-            </span>
-            <h3 className="font-display text-xl sm:text-2xl font-bold text-white">
-              {project.title}
-            </h3>
-          </motion.div>
+        {/* Hover overlay with project info */}
+        <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <span className="font-sans text-[10px] uppercase tracking-[3px] text-gray-400 mb-1.5 block">
+            {project.category}
+          </span>
+          <h3 className="font-display text-lg sm:text-xl font-bold text-white tracking-wide">
+            {project.title}
+          </h3>
         </div>
       </div>
     </motion.div>

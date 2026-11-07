@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Eyebrow } from "../components/ui/Button";
 import { SplitLines, Reveal } from "../components/ui/Type";
-import { experiments } from "../lib/content";
+import { experiments, site } from "../lib/content";
 import { useInViewOnce } from "../hooks/useMotion";
 import { usePageTitle } from "../hooks/usePageTitle";
 import Cursor from "../components/ui/Interactive";
@@ -45,7 +45,7 @@ const registry: Record<string, React.ComponentType> = {
 };
 
 export default function LabPage() {
-  usePageTitle("The Lab — 1st Nighthawk Innovations");
+  usePageTitle(`The Lab — ${site.name}`);
 
   return (
     <>

@@ -16,7 +16,7 @@ const budgets = [
 ];
 
 export default function ContactPage() {
-  usePageTitle("Start a Project — 1st Nighthawk Innovations");
+  usePageTitle(`Start a Project — ${site.name}`);
   const [form, setForm] = useState({
     name: "",
     email: "",

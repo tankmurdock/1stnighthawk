@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { Eyebrow } from "../components/ui/Button";
 import { SplitLines, Reveal } from "../components/ui/Type";
-import { projects, disciplines } from "../lib/content";
+import { projects, disciplines, site } from "../lib/content";
 import { cn } from "../lib/utils";
 import Mock from "../components/work/Mock";
 import { usePageTitle } from "../hooks/usePageTitle";
 
 export default function WorkPage() {
-  usePageTitle("Concept Work — 1st Nighthawk Innovations");
+  usePageTitle(`Concept Work — ${site.name}`);
   const [filter, setFilter] = useState<string>("All");
 
   const shown =

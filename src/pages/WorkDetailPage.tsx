@@ -1,6 +1,6 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import { projects } from "../lib/content";
+import { projects, site } from "../lib/content";
 import { Reveal, SplitLines } from "../components/ui/Type";
 import Mock from "../components/work/Mock";
 import { usePageTitle } from "../hooks/usePageTitle";
@@ -12,8 +12,8 @@ export default function WorkDetailPage() {
 
   usePageTitle(
     project
-      ? `${project.title} — Concept Study — 1st Nighthawk Innovations`
-      : "Concept Work — 1st Nighthawk Innovations",
+      ? `${project.title} — Concept Study — ${site.name}`
+      : `Concept Work — ${site.name}`,
   );
 
   if (!project) return <Navigate to="/work" replace />;

@@ -60,12 +60,15 @@ export default function Nav() {
               alt=""
               className="h-8 w-8 rounded-sm object-cover opacity-90 grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0"
             />
-            <span className="hidden flex-col leading-none sm:flex">
-              <span className="font-display text-[13px] font-semibold tracking-tight text-bone">
-                Nighthawk
+            {/* Stacked lockup at every size — the business name is always
+                fully visible. Type steps down on phones instead of the
+                name being truncated to "1st Nighthawk". */}
+            <span className="flex flex-col leading-none">
+              <span className="font-display text-[11px] font-semibold tracking-tight text-bone sm:text-[13px]">
+                {site.wordmark.first}
               </span>
-              <span className="label mt-1 text-[8px] tracking-[0.22em]">
-                Innovations
+              <span className="label mt-1 text-[7px] tracking-[0.18em] sm:text-[8px] sm:tracking-[0.22em]">
+                {site.wordmark.second}
               </span>
             </span>
           </Link>
@@ -145,6 +148,11 @@ export default function Nav() {
           ))}
 
           <div className="mt-10 space-y-2">
+            {/* Full business name in the menu overlay — this is often the
+                first place a phone visitor confirms whose site they're on. */}
+            <p className="mb-6 font-display text-[13px] font-semibold uppercase tracking-[0.1em] text-bone">
+              {site.name}
+            </p>
             <a
               href={`mailto:${site.email}`}
               className="block font-mono text-sm text-mute"

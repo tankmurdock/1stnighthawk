@@ -7,6 +7,8 @@
 
 export const site = {
   name: "1st Nighthawk Innovations",
+  /** Two-line lockup used in the nav. Derived so it can never drift. */
+  wordmark: { first: "1st Nighthawk", second: "Innovations" },
   short: "Nighthawk",
   domain: "1stnighthawkinnovations.com",
   email: "1stnighthawkllc@gmail.com",

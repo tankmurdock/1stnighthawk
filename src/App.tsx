@@ -8,7 +8,6 @@ import {
 import SmoothScroll, { useLenis } from "./components/layout/SmoothScroll";
 import Nav from "./components/layout/Nav";
 import Footer from "./components/layout/Footer";
-import Cursor from "./components/ui/Interactive";
 import Grain from "./components/layout/Grain";
 import PageTransition from "./components/layout/PageTransition";
 
@@ -113,7 +112,6 @@ export default function App() {
       <SmoothScroll>
         <ScrollToTop />
         <Grain />
-        <Cursor />
         <Nav />
         <div className="overflow-x-hidden">
           <AnimatedRoutes />

@@ -4,6 +4,7 @@ import { SplitLines, Reveal } from "../components/ui/Type";
 import { experiments } from "../lib/content";
 import { useInViewOnce } from "../hooks/useMotion";
 import { usePageTitle } from "../hooks/usePageTitle";
+import Cursor from "../components/ui/Interactive";
 
 const ShaderButton = lazy(() =>
   import("../components/lab/ShaderButton").then((m) => ({
@@ -47,42 +48,47 @@ export default function LabPage() {
   usePageTitle("The Lab — 1st Nighthawk Innovations");
 
   return (
-    <main className="pt-28 sm:pt-32">
-      <section className="container-x pb-16">
-        <Eyebrow>Interactive</Eyebrow>
+    <>
+      {/* Lab-only custom cursor — see the note in Interactive.tsx */}
+      <Cursor />
 
-        <SplitLines
-          as="h1"
-          className="display mt-10 max-w-[16ch] text-[clamp(2.4rem,7vw,5.2rem)] text-bone"
-        >
-          {"The lab.\nEverything is live."}
-        </SplitLines>
+      <main className="pt-28 sm:pt-32">
+        <section className="container-x pb-16">
+          <Eyebrow>Interactive</Eyebrow>
 
-        <Reveal delay={0.3} className="mt-8 max-w-2xl">
-          <p className="font-sans text-[15px] leading-[1.8] text-bone/55">
-            No videos, no GIFs, no screenshots. Each study below is running in
-            your browser as you read this. Move your pointer, drag, scroll,
-            click &mdash; they all respond.
-          </p>
-        </Reveal>
-      </section>
+          <SplitLines
+            as="h1"
+            className="display mt-10 max-w-[16ch] text-[clamp(2.4rem,7vw,5.2rem)] text-bone"
+          >
+            {"The lab.\nEverything is live."}
+          </SplitLines>
 
-      <section className="container-x pb-28">
-        <div className="grid gap-px bg-haze/30 md:grid-cols-2">
-          {experiments.map((exp, i) => (
-            <ExperimentCell
-              key={exp.id}
-              id={exp.id}
-              n={exp.n}
-              title={exp.title}
-              description={exp.description}
-              tech={exp.tech}
-              index={i}
-            />
-          ))}
-        </div>
-      </section>
-    </main>
+          <Reveal delay={0.3} className="mt-8 max-w-2xl">
+            <p className="font-sans text-[15px] leading-[1.8] text-bone/55">
+              No videos, no GIFs, no screenshots. Each study below is running in
+              your browser as you read this. Move your pointer, drag, scroll,
+              click &mdash; they all respond.
+            </p>
+          </Reveal>
+        </section>
+
+        <section className="container-x pb-28">
+          <div className="grid gap-px bg-haze/30 md:grid-cols-2">
+            {experiments.map((exp, i) => (
+              <ExperimentCell
+                key={exp.id}
+                id={exp.id}
+                n={exp.n}
+                title={exp.title}
+                description={exp.description}
+                tech={exp.tech}
+                index={i}
+              />
+            ))}
+          </div>
+        </section>
+      </main>
+    </>
   );
 }
 

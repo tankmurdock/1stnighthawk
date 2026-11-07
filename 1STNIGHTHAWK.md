@@ -60,6 +60,32 @@ Labels use `font-mono`, `text-[10px]`, `tracking-[0.28em]`, `uppercase`, `text-m
 - Nothing bounces. Nothing spins for the sake of spinning.
 - Every animation must survive `prefers-reduced-motion` (see `useReducedMotion`).
 
+### The custom cursor is Lab-only
+
+This is a deliberate product decision, not a technical one.
+
+Customers arrive to read a page. A pointer that doesn't look like a pointer
+is charming for ten seconds and then it is friction — and friction on the
+first page is what a prospect remembers. The Lab is the one route where the
+visitor has explicitly opted into poking at things, so an unfamiliar cursor
+there reads as part of the exhibit.
+
+Implementation notes:
+- `Cursor` is mounted in `LabPage`, **not** the app shell.
+- It adds `cursor-lab` to `<html>`; `index.css` hides the native arrow under
+  that class only, and keeps a real `text` caret in inputs/textareas.
+- Touch devices (`pointer: coarse`) render nothing at all — no invisible DOM.
+- Reduced motion renders nothing.
+- No word labels. The shape is just a dot and a ring.
+
+### Magnetism is a lean, not a twitch
+
+`Magnetic` in `Interactive.tsx` engages within 14px of the element's own
+bounds and caps travel at 5px. An earlier version engaged from 1.5× the
+element's width away, so buttons drifted before the pointer was anywhere
+near them — measured at ~0px movement from 60px away now, versus visible
+drift before.
+
 ---
 
 ## Routes
@@ -195,8 +221,14 @@ PowerShell note: chain with `;` not `&&` (see `POWERSHELL-PROJECT-RULES`).
     of guessing from tags, with zero per-frame React state.
   - Build, lint and typecheck all clean.
 
-### Fixed after visual review
+### Fixed after review
 
+- **The custom cursor never hid the native one.** There was no `cursor: none`
+  anywhere, so desktop visitors saw the OS arrow *plus* a dot *plus* a lagging
+  ring — three cursors at once. The real fix was scoping: the cursor now lives
+  only in the Lab, and only there is the native arrow suppressed.
+- **Magnetic pull engaged from 1.5× the element's width away**, so buttons
+  drifted before you were near them. Now a 14px margin with 5px max travel.
 - Relief initially read as crystalline shrapnel — per-pixel luminance was
   mapped straight to Z, so every specular edge became a spike. Resolved with
   separable box blur at two scales.

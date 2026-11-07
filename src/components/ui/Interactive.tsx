@@ -1,29 +1,46 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useReducedMotion } from "../../hooks/useMotion";
 import { cn } from "../../lib/utils";
 
 /* ══════════════════════════════════════════════════════════════════
-   Cursor — one element, driven entirely by rAF + direct transform
-   writes. It reads intent from the DOM (data-cursor="label") rather
-   than guessing from tags, so any element can declare what it is.
+   Cursor — a precision ring that replaces the OS arrow, on the Lab
+   only.
 
-   Never uses React state for position: no re-render per frame.
+   Reasoning: customers arrive to read. A cursor that doesn't look like
+   a cursor is charming for ten seconds and then it's friction. The Lab
+   is the one place where the visitor has explicitly asked to poke at
+   things, so an unfamiliar pointer there reads as part of the exhibit
+   rather than an obstacle.
+
+   Everywhere else the native arrow stays — which is why this component
+   is mounted inside LabPage and not in the app shell.
    ══════════════════════════════════════════════════════════════════ */
+
+const INTERACTIVE =
+  "a,button,input,textarea,select,label,[role='button'],[data-cursor]";
 
 export default function Cursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const reduced = useReducedMotion();
+  // Tracked in state so we can skip rendering the elements entirely on
+  // touch devices rather than mounting invisible, unused nodes.
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setEnabled(true);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+
     const dot = dotRef.current;
     const ring = ringRef.current;
-    const label = labelRef.current;
-    if (!dot || !ring || !label) return;
+    if (!dot || !ring) return;
 
-    // touch / coarse pointer devices get the native cursor
-    if (window.matchMedia("(pointer: coarse)").matches) return;
+    // Scoped to the Lab only — see the note above.
+    document.documentElement.classList.add("cursor-lab");
 
     let mx = window.innerWidth / 2;
     let my = window.innerHeight / 2;
@@ -34,11 +51,6 @@ export default function Cursor() {
     let raf = 0;
     let visible = false;
 
-    const setLabel = (text: string) => {
-      label.textContent = text;
-      label.style.opacity = text ? "1" : "0";
-    };
-
     const onMove = (e: PointerEvent) => {
       mx = e.clientX;
       my = e.clientY;
@@ -47,32 +59,13 @@ export default function Cursor() {
         visible = true;
         dot.style.opacity = "1";
         ring.style.opacity = "1";
-        ring.style.borderColor = "rgba(244,241,234,0.28)";
       }
 
-      // read intent from the element under the pointer
       const el = (e.target as HTMLElement)?.closest?.(
-        "[data-cursor],a,button,input,textarea,select,[role='button']",
+        INTERACTIVE,
       ) as HTMLElement | null;
-
-      const declared = el?.dataset?.cursor;
-
-      if (declared && declared !== "hover") {
-        setLabel(declared);
-        targetScale = 2.15;
-        ring.style.background = "rgba(255,160,58,0.10)";
-        ring.style.borderColor = "rgba(255,160,58,0.55)";
-      } else if (el) {
-        setLabel("");
-        targetScale = 1.7;
-        ring.style.background = "rgba(255,160,58,0.06)";
-        ring.style.borderColor = "rgba(255,160,58,0.45)";
-      } else {
-        setLabel("");
-        targetScale = 1;
-        ring.style.background = "transparent";
-        ring.style.borderColor = "rgba(244,241,234,0.28)";
-      }
+      // 1 = resting, 1.55 = over something you can act on
+      targetScale = el ? 1.55 : 1;
     };
 
     const onLeave = () => {
@@ -82,27 +75,23 @@ export default function Cursor() {
     };
 
     const onDown = () => {
-      targetScale *= 0.82;
+      targetScale *= 0.86;
     };
     const onUp = () => {
-      // re-resolve intent on release
       const el = document.elementFromPoint(mx, my) as HTMLElement | null;
-      const interactive = el?.closest?.(
-        "[data-cursor],a,button,input,textarea,select,[role='button']",
-      );
-      targetScale = interactive ? 1.7 : 1;
+      targetScale = el?.closest?.(INTERACTIVE) ? 1.55 : 1;
     };
 
     const tick = () => {
-      // dot tracks nearly 1:1 — it should feel welded to the pointer
+      // dot is welded to the pointer — it must feel 1:1
       dot.style.transform = `translate3d(${mx - 2}px, ${my - 2}px, 0)`;
 
-      // ring lags with a soft spring
-      rx += (mx - rx) * 0.16;
-      ry += (my - ry) * 0.16;
-      scale += (targetScale - scale) * 0.14;
+      // ring trails with a soft spring so movement has weight
+      rx += (mx - rx) * 0.2;
+      ry += (my - ry) * 0.2;
+      scale += (targetScale - scale) * 0.16;
 
-      ring.style.transform = `translate3d(${rx - 20}px, ${ry - 20}px, 0) scale(${scale})`;
+      ring.style.transform = `translate3d(${rx - 16}px, ${ry - 16}px, 0) scale(${scale.toFixed(3)})`;
 
       raf = requestAnimationFrame(tick);
     };
@@ -114,62 +103,66 @@ export default function Cursor() {
     raf = requestAnimationFrame(tick);
 
     return () => {
+      document.documentElement.classList.remove("cursor-lab");
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
       document.removeEventListener("pointerleave", onLeave);
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [enabled]);
 
-  if (reduced) return null;
+  if (!enabled) return null;
 
   return (
     <div
       aria-hidden
       className="pointer-events-none fixed inset-0 z-[300] hidden md:block"
     >
+      {/* hard centre dot — the precise bit */}
       <div
         ref={dotRef}
-        className="absolute left-0 top-0 h-1 w-1 rounded-full bg-sodium opacity-0 transition-opacity duration-200"
+        className="absolute left-0 top-0 h-1 w-1 rounded-full bg-bone opacity-0 transition-opacity duration-200"
         style={{ willChange: "transform" }}
       />
+      {/* ring — large enough to actually track with your eye */}
       <div
         ref={ringRef}
-        className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full border opacity-0 transition-[opacity,background-color,border-color] duration-300 ease-out"
+        className="absolute left-0 top-0 h-8 w-8 rounded-full border border-bone/55 opacity-0 transition-[opacity,border-color] duration-300 ease-out"
         style={{
-          borderColor: "rgba(244,241,234,0.28)",
           willChange: "transform",
-          backdropFilter: "blur(1px)",
+          boxShadow:
+            "0 0 0 3px rgba(4,5,10,0.45), 0 0 14px rgba(255,160,58,0.18)",
         }}
-      >
-        <span
-          ref={labelRef}
-          className="select-none font-mono text-[5px] uppercase tracking-[0.18em] text-sodium opacity-0 transition-opacity duration-200"
-        />
-      </div>
+      />
     </div>
   );
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   Magnetic — pulls an element toward the pointer, releasing with a
-   spring. Strength is measured against the element's own size so it
-   feels identical on a 40px chip and a 300px card.
+   Magnetic — a small, deliberate pull toward the pointer.
+
+   This is intentionally subtle. The previous version engaged from 1.5×
+   the element's own width away, which meant buttons drifted before you
+   were anywhere near them — it read as a twitch, not as magnetism.
+   Now the field is a thin margin around the element itself, and the
+   travel is capped so a control never leaves its own footprint.
    ══════════════════════════════════════════════════════════════════ */
+
+/** How far outside the element the pull is felt, in px. */
+const PAD = 14;
+/** Maximum travel, in px. Keeps small controls feeling anchored. */
+const MAX_TRAVEL = 5;
 
 export function Magnetic({
   children,
   className,
-  strength = 0.38,
-  radius = 1.5,
+  strength = 0.28,
   as = "div",
 }: {
   children: ReactNode;
   className?: string;
   strength?: number;
-  /** how far outside the bounds the field extends, in element-widths */
-  radius?: number;
   as?: "div" | "span";
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -193,12 +186,12 @@ export function Magnetic({
       const dx = e.clientX - midX;
       const dy = e.clientY - midY;
 
-      const reachX = r.width * radius;
-      const reachY = r.height * radius;
+      const inside =
+        Math.abs(dx) < r.width / 2 + PAD && Math.abs(dy) < r.height / 2 + PAD;
 
-      if (Math.abs(dx) < reachX && Math.abs(dy) < reachY) {
-        tx = dx * strength;
-        ty = dy * strength;
+      if (inside) {
+        tx = Math.max(-MAX_TRAVEL, Math.min(MAX_TRAVEL, dx * strength));
+        ty = Math.max(-MAX_TRAVEL, Math.min(MAX_TRAVEL, dy * strength));
       } else {
         tx = 0;
         ty = 0;
@@ -206,9 +199,12 @@ export function Magnetic({
     };
 
     const tick = () => {
-      cx += (tx - cx) * 0.16;
-      cy += (ty - cy) * 0.16;
-      el.style.transform = `translate3d(${cx.toFixed(2)}px, ${cy.toFixed(2)}px, 0)`;
+      cx += (tx - cx) * 0.14;
+      cy += (ty - cy) * 0.14;
+      // skip the write when we're effectively at rest
+      if (Math.abs(cx) > 0.01 || Math.abs(cy) > 0.01) {
+        el.style.transform = `translate3d(${cx.toFixed(2)}px, ${cy.toFixed(2)}px, 0)`;
+      }
       raf = requestAnimationFrame(tick);
     };
 
@@ -220,7 +216,7 @@ export function Magnetic({
       cancelAnimationFrame(raf);
       el.style.transform = "";
     };
-  }, [strength, radius, reduced]);
+  }, [strength, reduced]);
 
   const Tag = as;
 

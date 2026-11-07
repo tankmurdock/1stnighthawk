@@ -11,9 +11,12 @@ import emailjs from "@emailjs/browser";
 // Template variables used: {{title}}, {{name}}, {{email}}, {{message}}
 // ============================================================
 
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID =
+  import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID =
+  import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
+const EMAILJS_PUBLIC_KEY =
+  import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
 
 interface ContactFormData {
   name: string;
@@ -22,7 +25,9 @@ interface ContactFormData {
   message: string;
 }
 
-export async function sendContactEmail(data: ContactFormData): Promise<boolean> {
+export async function sendContactEmail(
+  data: ContactFormData,
+): Promise<boolean> {
   try {
     const fullMessage = data.budget
       ? `Budget: ${data.budget}\n\n${data.message}`
@@ -37,7 +42,7 @@ export async function sendContactEmail(data: ContactFormData): Promise<boolean> 
         email: data.email,
         message: fullMessage,
       },
-      EMAILJS_PUBLIC_KEY
+      EMAILJS_PUBLIC_KEY,
     );
 
     return result.status === 200;

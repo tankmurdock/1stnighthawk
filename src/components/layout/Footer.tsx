@@ -1,133 +1,111 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Github, Twitter, Linkedin, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Github, Linkedin } from "lucide-react";
+import { site, nav } from "../../lib/content";
+import { SplitLines } from "../ui/Type";
 
 export default function Footer() {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="relative bg-black border-t border-[#00c8ff]/[0.06]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
-        <div className="mb-20">
-          <motion.h2
-            initial={{ y: 60, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-            viewport={{ once: true }}
-            className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight mb-8 tracking-wide uppercase"
-          >
-            Let's build something
-            <br />
-            <span className="text-[#00c8ff]">extraordinary.</span>
-          </motion.h2>
-          <motion.div
-            initial={{ y: 40, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <Link to="/contact">
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="font-sans text-base font-medium tracking-[2px] uppercase text-[#00c8ff] border border-[#00c8ff33] px-8 py-4 transition-all duration-300 hover:bg-[#00c8ff]/5 hover:border-[#00c8ff66] hover:shadow-[0_0_25px_rgba(0,200,255,0.08)] group flex items-center gap-2"
-              >
-                Start a Project
-                <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </motion.button>
+    <footer className="relative overflow-hidden border-t border-haze/40 bg-abyss">
+      {/* warm floor light — the sodium spill from the hero, carried through */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-40 left-1/2 h-80 w-[70%] -translate-x-1/2 rounded-[100%] opacity-40 blur-[100px]"
+        style={{
+          background: "radial-gradient(ellipse, #ffa03a 0%, transparent 70%)",
+        }}
+      />
+
+      <div className="container-x relative py-20 sm:py-28">
+        <div className="grid gap-14 lg:grid-cols-[1.4fr_1fr_1fr]">
+          <div>
+            <p className="label mb-5 text-sodium/70">Next step</p>
+            <SplitLines
+              as="h2"
+              className="display max-w-[16ch] text-[clamp(2rem,5vw,3.4rem)] text-bone"
+            >
+              {"Have something\nworth building?"}
+            </SplitLines>
+
+            <Link
+              to="/contact"
+              className="group mt-8 inline-flex items-center gap-3 border-b border-sodium/30 pb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-sodium transition-colors duration-500 hover:border-sodium"
+              data-cursor="write"
+            >
+              Start a project
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
-          </motion.div>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-12 pb-16 border-b border-white/[0.06]">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <img
-                src="/nighthawk.jpeg"
-                alt="1st Nighthawk Innovations"
-                className="h-10 w-auto"
-              />
-              <span className="font-display font-bold text-xs tracking-[2px] uppercase text-white whitespace-nowrap">
-                1st Nighthawk Innovations
-              </span>
-            </div>
-            <p className="text-gray-600 font-sans text-sm leading-relaxed max-w-xs">
-              Crafting premium digital experiences through expert UI/UX design
-              and cutting-edge development.
-            </p>
           </div>
 
           <div>
-            <h3 className="font-sans text-[10px] uppercase tracking-[4px] text-gray-600 mb-6">
-              Navigation
-            </h3>
-            <div className="flex flex-col gap-3">
-              <Link to="/" className="font-sans text-gray-400 hover:text-white transition-colors text-sm tracking-wide link-underline w-fit">
-                Home
-              </Link>
-              <Link to="/work" className="font-sans text-gray-400 hover:text-white transition-colors text-sm tracking-wide link-underline w-fit">
-                Work
-              </Link>
-              <Link to="/contact" className="font-sans text-gray-400 hover:text-white transition-colors text-sm tracking-wide link-underline w-fit">
-                Contact
-              </Link>
-            </div>
+            <p className="label mb-5">Sitemap</p>
+            <ul className="space-y-3">
+              {nav.map((item) => (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    className="wipe font-sans text-sm text-bone/60 transition-colors duration-300 hover:text-bone"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div>
-            <h3 className="font-sans text-[10px] uppercase tracking-[4px] text-gray-600 mb-6">
-              Get in Touch
-            </h3>
-            <div className="flex flex-col gap-3">
+            <p className="label mb-5">Direct</p>
+            <ul className="space-y-3">
+              <li>
+                <a
+                  href={`mailto:${site.email}`}
+                  className="wipe font-sans text-sm text-bone/60 transition-colors duration-300 hover:text-bone"
+                >
+                  {site.email}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`tel:${site.phoneHref}`}
+                  className="wipe font-sans text-sm text-bone/60 transition-colors duration-300 hover:text-bone"
+                >
+                  {site.phone}
+                </a>
+              </li>
+              <li className="font-sans text-sm text-mute">{site.location}</li>
+            </ul>
+
+            <div className="mt-7 flex items-center gap-4">
               <a
-                href="mailto:1stnighthawkllc@gmail.com"
-                className="font-sans text-gray-400 hover:text-white transition-colors text-sm tracking-wide link-underline w-fit"
+                href={site.socials.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                className="text-mute transition-colors duration-300 hover:text-sodium"
               >
-                1stnighthawkllc@gmail.com
+                <Github className="h-4 w-4" />
               </a>
               <a
-                href="tel:+19043383032"
-                className="font-sans text-gray-400 hover:text-white transition-colors text-sm tracking-wide link-underline w-fit"
+                href={site.socials.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="text-mute transition-colors duration-300 hover:text-sodium"
               >
-                +1 (904) 338-3032
+                <Linkedin className="h-4 w-4" />
               </a>
-              <span className="font-sans text-gray-600 text-sm">
-                Jacksonville, Florida
-              </span>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-between items-center pt-8 gap-4">
-          <p className="font-sans text-gray-700 text-xs tracking-wide">
-            &copy; {new Date().getFullYear()} 1st Nighthawk Innovations. All rights reserved.
+        <div className="mt-16 flex flex-col gap-3 border-t border-haze/40 pt-7 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-mute/70">
+            © {year} {site.name}
           </p>
-          <div className="flex items-center gap-6">
-            <motion.a
-              href="https://github.com/tankmurdock"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ y: -2 }}
-              className="text-gray-700 hover:text-[#00c8ff] transition-colors"
-              aria-label="GitHub"
-            >
-              <Github className="w-4 h-4" />
-            </motion.a>
-            <motion.a
-              href="#"
-              whileHover={{ y: -2 }}
-              className="text-gray-700 hover:text-[#00c8ff] transition-colors"
-              aria-label="Twitter"
-            >
-              <Twitter className="w-4 h-4" />
-            </motion.a>
-            <motion.a
-              href="#"
-              whileHover={{ y: -2 }}
-              className="text-gray-700 hover:text-[#00c8ff] transition-colors"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="w-4 h-4" />
-            </motion.a>
-          </div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-mute/50">
+            {site.role} · {site.location}
+          </p>
         </div>
       </div>
     </footer>

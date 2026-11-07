@@ -25,3 +25,7 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# local audit artifacts
+.shots
+.playwright-mcp

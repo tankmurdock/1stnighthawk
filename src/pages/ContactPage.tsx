@@ -1,343 +1,275 @@
-import { useState, useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { ArrowUpRight, Check, AlertCircle, Loader2 } from "lucide-react";
-import TextReveal, { FadeReveal } from "../components/shared/TextReveal";
+import { useState } from "react";
+import { ArrowUpRight, Check, Loader2 } from "lucide-react";
+import { Eyebrow } from "../components/ui/Button";
+import { SplitLines, Reveal } from "../components/ui/Type";
+import { site } from "../lib/content";
 import { sendContactEmail } from "../lib/emailjs";
+import { cn } from "../lib/utils";
+import { usePageTitle } from "../hooks/usePageTitle";
 
-const budgetRanges = [
-  "$5K - $10K",
-  "$10K - $25K",
-  "$25K - $50K",
-  "$50K+",
+const budgets = [
+  "Under $5k",
+  "$5k – $10k",
+  "$10k – $25k",
+  "$25k+",
+  "Not sure yet",
 ];
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
+  usePageTitle("Start a Project — 1st Nighthawk Innovations");
+  const [form, setForm] = useState({
     name: "",
     email: "",
     budget: "",
     message: "",
   });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle",
+  );
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (form.name.trim().length < 2) e.name = "Tell me your name";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      e.email = "That email looks off";
+    if (form.message.trim().length < 12)
+      e.message = "A little more detail, please";
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
 
-    setStatus("sending");
+  const submit = async (ev: React.FormEvent) => {
+    ev.preventDefault();
+    if (!validate()) return;
 
-    const success = await sendContactEmail(formData);
-
-    if (success) {
-      setStatus("sent");
-      setFormData({ name: "", email: "", budget: "", message: "" });
-      setTimeout(() => setStatus("idle"), 5000);
-    } else {
-      setStatus("error");
-      setTimeout(() => setStatus("idle"), 4000);
-    }
+    setState("sending");
+    const ok = await sendContactEmail(form);
+    setState(ok ? "sent" : "error");
   };
 
   return (
-    <main className="pt-32 pb-20 min-h-screen">
-      <div className="px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-20 lg:gap-32">
+    <main className="pt-28 sm:pt-32">
+      <section className="container-x pb-24">
+        <Eyebrow>Contact</Eyebrow>
+
+        <div className="mt-10 grid gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
+          {/* Left: the human side */}
           <div>
-            <TextReveal
+            <SplitLines
               as="h1"
-              className="font-display text-5xl sm:text-6xl md:text-7xl font-bold text-white leading-[0.95] mb-8"
-              stagger={0.06}
-              animate="onMount"
+              className="display max-w-[12ch] text-[clamp(2.4rem,6.6vw,4.6rem)] text-bone"
             >
-              Let's talk.
-            </TextReveal>
+              {"Tell me what\nyou're building."}
+            </SplitLines>
 
-            <FadeReveal delay={0.4}>
-              <p className="text-gray-500 text-lg sm:text-xl max-w-md leading-relaxed mb-12">
-                Have a project in mind? We'd love to hear about it. Drop us a line
-                and let's create something extraordinary together.
+            <Reveal delay={0.25} className="mt-8 max-w-md">
+              <p className="font-sans text-[15px] leading-[1.85] text-bone/55">
+                A paragraph is enough. What it is, who it&rsquo;s for, and when
+                it needs to exist. I answer every message myself — usually
+                within a day, and always with an honest read on whether
+                I&rsquo;m the right person for it.
               </p>
-            </FadeReveal>
+            </Reveal>
 
-            <FadeReveal delay={0.6}>
-              <div className="space-y-6">
-                <div>
-                  <span className="text-xs uppercase tracking-wider text-gray-600 block mb-2">
-                    Email
-                  </span>
-                  <a
-                    href="mailto:1stnighthawkllc@gmail.com"
-                    className="text-white text-lg hover:text-primary-400 transition-colors link-underline"
-                  >
-                    1stnighthawkllc@gmail.com
-                  </a>
-                </div>
-                <div>
-                  <span className="text-xs uppercase tracking-wider text-gray-600 block mb-2">
-                    Phone
-                  </span>
-                  <a
-                    href="tel:+19043383032"
-                    className="text-white text-lg hover:text-primary-400 transition-colors link-underline"
-                  >
-                    +1 (904) 338-3032
-                  </a>
-                </div>
-                <div>
-                  <span className="text-xs uppercase tracking-wider text-gray-600 block mb-2">
-                    Location
-                  </span>
-                  <span className="text-gray-400 text-lg">
-                    Jacksonville, Florida
-                  </span>
-                </div>
+            <Reveal
+              delay={0.35}
+              className="mt-12 space-y-6 border-t border-haze/60 pt-8"
+            >
+              <div>
+                <p className="label mb-2">Email</p>
+                <a
+                  href={`mailto:${site.email}`}
+                  className="wipe font-sans text-[15px] text-bone/80 transition-colors hover:text-sodium"
+                >
+                  {site.email}
+                </a>
               </div>
-            </FadeReveal>
+              <div>
+                <p className="label mb-2">Phone</p>
+                <a
+                  href={`tel:${site.phoneHref}`}
+                  className="wipe font-sans text-[15px] text-bone/80 transition-colors hover:text-sodium"
+                >
+                  {site.phone}
+                </a>
+              </div>
+              <div>
+                <p className="label mb-2">Based in</p>
+                <p className="font-sans text-[15px] text-bone/80">
+                  {site.location}
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.45} className="mt-10">
+              <div className="flex items-center gap-2.5">
+                <span
+                  className="h-1.5 w-1.5 rounded-full bg-sodium"
+                  style={{ animation: "pulse-dot 2.4s ease-in-out infinite" }}
+                />
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-mute">
+                  Taking new work · {site.availability}
+                </span>
+              </div>
+            </Reveal>
           </div>
 
-          <FadeReveal delay={0.3} direction="right">
-            <form onSubmit={handleSubmit} className="space-y-10">
-              <AnimatedInput
-                label="Your Name"
-                value={formData.name}
-                onChange={(v) => setFormData({ ...formData, name: v })}
-                isFocused={focusedField === "name"}
-                onFocus={() => setFocusedField("name")}
-                onBlur={() => setFocusedField(null)}
-                delay={0.5}
-              />
-
-              <AnimatedInput
-                label="Email Address"
-                type="email"
-                value={formData.email}
-                onChange={(v) => setFormData({ ...formData, email: v })}
-                isFocused={focusedField === "email"}
-                onFocus={() => setFocusedField("email")}
-                onBlur={() => setFocusedField(null)}
-                delay={0.6}
-              />
-
-              <BudgetSelector
-                selected={formData.budget}
-                onSelect={(v) => setFormData({ ...formData, budget: v })}
-                delay={0.7}
-              />
-
-              <AnimatedTextarea
-                label="Tell us about your project"
-                value={formData.message}
-                onChange={(v) => setFormData({ ...formData, message: v })}
-                isFocused={focusedField === "message"}
-                onFocus={() => setFocusedField("message")}
-                onBlur={() => setFocusedField(null)}
-                delay={0.8}
-              />
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.9 }}
-              >
-                <motion.button
-                  type="submit"
-                  whileHover={status === "idle" ? { scale: 1.03 } : undefined}
-                  whileTap={status === "idle" ? { scale: 0.97 } : undefined}
-                  className={`w-full py-5 rounded-full font-medium text-lg transition-all duration-500 flex items-center justify-center gap-3 ${
-                    status === "sent"
-                      ? "bg-accent-500 text-white"
-                      : status === "error"
-                        ? "bg-red-500/20 border border-red-500/40 text-red-300"
-                        : "btn-primary"
-                  }`}
-                  disabled={status !== "idle"}
+          {/* Right: the form */}
+          <div>
+            {state === "sent" ? (
+              <div className="flex min-h-[420px] flex-col items-start justify-center border border-haze/60 bg-dusk/30 p-10">
+                <span className="grid h-11 w-11 place-items-center rounded-full bg-sodium/15">
+                  <Check className="h-5 w-5 text-sodium" />
+                </span>
+                <h2 className="mt-6 font-display text-2xl font-medium text-bone">
+                  Message sent.
+                </h2>
+                <p className="mt-3 max-w-sm font-sans text-[14px] leading-relaxed text-bone/50">
+                  Thanks, {form.name.split(" ")[0]}. I&rsquo;ll get back to you
+                  at {form.email} within a day.
+                </p>
+                <button
+                  onClick={() => {
+                    setForm({ name: "", email: "", budget: "", message: "" });
+                    setState("idle");
+                  }}
+                  className="mt-8 border-b border-sodium/40 pb-1 font-mono text-[10px] uppercase tracking-[0.2em] text-sodium"
                 >
-                  {status === "sending" ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>Sending...</span>
-                    </>
-                  ) : status === "sent" ? (
-                    <>
-                      <Check className="w-5 h-5" />
-                      <span>Message Sent!</span>
-                    </>
-                  ) : status === "error" ? (
-                    <>
-                      <AlertCircle className="w-5 h-5" />
-                      <span>Failed to send. Try again.</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Send Message</span>
-                      <ArrowUpRight className="w-5 h-5" />
-                    </>
+                  Send another
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={submit} noValidate className="space-y-7">
+                <Field
+                  label="Your name"
+                  value={form.name}
+                  onChange={(v) => setForm({ ...form, name: v })}
+                  error={errors.name}
+                  autoComplete="name"
+                />
+                <Field
+                  label="Email"
+                  type="email"
+                  value={form.email}
+                  onChange={(v) => setForm({ ...form, email: v })}
+                  error={errors.email}
+                  autoComplete="email"
+                />
+
+                <div>
+                  <p className="label mb-3">Budget range</p>
+                  <div className="flex flex-wrap gap-2">
+                    {budgets.map((b) => (
+                      <button
+                        key={b}
+                        type="button"
+                        onClick={() => setForm({ ...form, budget: b })}
+                        className={cn(
+                          "border px-3.5 py-2 font-mono text-[10px] uppercase tracking-[0.12em] transition-all duration-300",
+                          form.budget === b
+                            ? "border-sodium/70 bg-sodium/10 text-sodium"
+                            : "border-haze/70 text-mute hover:border-haze hover:text-bone/70",
+                        )}
+                        aria-pressed={form.budget === b}
+                      >
+                        {b}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="label mb-3 block">
+                    The project
+                  </label>
+                  <textarea
+                    id="message"
+                    rows={5}
+                    value={form.message}
+                    onChange={(e) =>
+                      setForm({ ...form, message: e.target.value })
+                    }
+                    className="w-full resize-none border-b border-haze bg-transparent pb-3 font-sans text-[15px] text-bone outline-none transition-colors placeholder:text-mute/40 focus:border-sodium"
+                    placeholder="What are you building, and what's the deadline?"
+                  />
+                  {errors.message && (
+                    <p className="mt-2 font-mono text-[10px] text-ember">
+                      {errors.message}
+                    </p>
                   )}
-                </motion.button>
-              </motion.div>
-            </form>
-          </FadeReveal>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={state === "sending"}
+                  data-cursor="send"
+                  className="group relative flex w-full items-center justify-center gap-3 overflow-hidden bg-sodium py-4 font-mono text-[11px] uppercase tracking-[0.2em] text-void transition-opacity disabled:opacity-60"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    {state === "sending" ? (
+                      <>
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        Sending
+                      </>
+                    ) : (
+                      <>
+                        Send message
+                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </>
+                    )}
+                  </span>
+                  <span className="absolute inset-0 -translate-y-full bg-bone transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />
+                </button>
+
+                {state === "error" && (
+                  <p className="font-mono text-[10px] leading-relaxed text-ember">
+                    That didn&rsquo;t go through. Email me directly at{" "}
+                    {site.email}.
+                  </p>
+                )}
+              </form>
+            )}
+          </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
 
-function AnimatedInput({
+function Field({
   label,
-  type = "text",
   value,
   onChange,
-  isFocused,
-  onFocus,
-  onBlur,
-  delay = 0,
+  error,
+  type = "text",
+  autoComplete,
 }: {
   label: string;
-  type?: string;
   value: string;
   onChange: (v: string) => void;
-  isFocused: boolean;
-  onFocus: () => void;
-  onBlur: () => void;
-  delay?: number;
+  error?: string;
+  type?: string;
+  autoComplete?: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true });
-  const isActive = isFocused || value.length > 0;
+  const id = label.toLowerCase().replace(/\s+/g, "-");
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : undefined}
-      transition={{ duration: 0.6, delay }}
-      className="relative"
-    >
-      <label
-        className={`absolute left-0 transition-all duration-300 pointer-events-none ${
-          isActive
-            ? "text-xs text-primary-400 -top-5"
-            : "text-base text-gray-600 top-4"
-        }`}
-      >
+    <div>
+      <label htmlFor={id} className="label mb-3 block">
         {label}
       </label>
       <input
+        id={id}
         type={type}
         value={value}
+        autoComplete={autoComplete}
         onChange={(e) => onChange(e.target.value)}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        aria-label={label}
-        className="w-full bg-transparent border-b border-white/10 py-4 text-white text-base outline-none transition-colors focus:border-primary-500"
+        className="w-full border-b border-haze bg-transparent pb-3 font-sans text-[15px] text-bone outline-none transition-colors focus:border-sodium"
       />
-      <motion.div
-        className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-primary-500 to-accent-400"
-        initial={{ width: "0%" }}
-        animate={{ width: isFocused ? "100%" : "0%" }}
-        transition={{ duration: 0.4 }}
-      />
-    </motion.div>
-  );
-}
-
-function AnimatedTextarea({
-  label,
-  value,
-  onChange,
-  isFocused,
-  onFocus,
-  onBlur,
-  delay = 0,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  isFocused: boolean;
-  onFocus: () => void;
-  onBlur: () => void;
-  delay?: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true });
-  const isActive = isFocused || value.length > 0;
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : undefined}
-      transition={{ duration: 0.6, delay }}
-      className="relative"
-    >
-      <label
-        className={`absolute left-0 transition-all duration-300 pointer-events-none ${
-          isActive
-            ? "text-xs text-primary-400 -top-5"
-            : "text-base text-gray-600 top-4"
-        }`}
-      >
-        {label}
-      </label>
-      <textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        rows={4}
-        aria-label={label}
-        className="w-full bg-transparent border-b border-white/10 py-4 text-white text-base outline-none transition-colors focus:border-primary-500 resize-none"
-      />
-      <motion.div
-        className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-primary-500 to-accent-400"
-        initial={{ width: "0%" }}
-        animate={{ width: isFocused ? "100%" : "0%" }}
-        transition={{ duration: 0.4 }}
-      />
-    </motion.div>
-  );
-}
-
-function BudgetSelector({
-  selected,
-  onSelect,
-  delay = 0,
-}: {
-  selected: string;
-  onSelect: (v: string) => void;
-  delay?: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : undefined}
-      transition={{ duration: 0.6, delay }}
-    >
-      <span className="text-xs text-gray-600 block mb-4 uppercase tracking-wider">
-        Budget Range
-      </span>
-      <div className="flex flex-wrap gap-3">
-        {budgetRanges.map((range) => (
-          <button
-            key={range}
-            type="button"
-            onClick={() => onSelect(range)}
-            className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
-              selected === range
-                ? "bg-primary-500 text-white"
-                : "glass text-gray-400 hover:text-white hover:bg-white/[0.06]"
-            }`}
-          >
-            {range}
-          </button>
-        ))}
-      </div>
-    </motion.div>
+      {error && (
+        <p className="mt-2 font-mono text-[10px] text-ember">{error}</p>
+      )}
+    </div>
   );
 }

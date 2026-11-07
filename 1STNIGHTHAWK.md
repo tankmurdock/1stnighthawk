@@ -1,0 +1,212 @@
+# 1st Nighthawk Innovations — Project Doc
+
+Personal studio site for a solo UX/UI designer + front-end engineer.
+Positioning: one person who does both the design and the build, with unusually
+high craft in motion and 3D.
+
+**Concept: "Night Operations."** A hawk hunts in darkness. The site is graded
+like a night aerial — near-black, sodium-amber light, cool instrument glow.
+Cinematic restraint over gamer-cyan.
+
+---
+
+## Stack
+
+| Layer | Choice |
+|---|---|
+| Framework | React 19 + TypeScript |
+| Build | Vite 6 |
+| Styling | Tailwind CSS 4 (`@theme` tokens, no config file) |
+| 3D | three.js + @react-three/fiber + @react-three/drei |
+| Post | @react-three/postprocessing + postprocessing |
+| Motion | GSAP + ScrollTrigger (scroll choreography) |
+| Smooth scroll | Lenis (synced to GSAP ticker) |
+| Route transitions | Hand-rolled CSS (framer-motion removed — see changelog) |
+| Forms | EmailJS |
+| Screenshots | Playwright (dev-only, `scripts/`) |
+
+---
+
+## Design System
+
+### Palette (`src/index.css` → `@theme`)
+
+| Token | Hex | Use |
+|---|---|---|
+| `void` | `#04050a` | page base |
+| `abyss` | `#080b13` | section base |
+| `dusk` | `#0c121d` | raised surface |
+| `graphite` | `#151d2b` | cards, borders |
+| `haze` | `#26313f` | hairlines, dividers |
+| `mute` | `#6d7c92` | secondary text |
+| `bone` | `#f4f1ea` | primary text (warm white, never `#fff`) |
+| `sodium` | `#ffa03a` | **primary accent** — sodium streetlight amber |
+| `ember` | `#ff6a2c` | hot accent, sparing |
+| `ice` | `#74d0e6` | technical detail only — data, mono labels, HUD |
+
+Rule: **cyan is a detail, not a theme.** If a screen reads as "cyan", it's wrong.
+
+### Type
+
+- Display: **Bricolage Grotesque** (variable — `wght`, `wdth`, `opsz` used live)
+- Body: **Inter Tight**
+- Mono/UI labels: **JetBrains Mono**
+
+Labels use `font-mono`, `text-[10px]`, `tracking-[0.28em]`, `uppercase`, `text-mute`.
+
+### Motion
+
+- Long, weighted easings: `cubic-bezier(0.16, 1, 0.3, 1)`
+- Nothing bounces. Nothing spins for the sake of spinning.
+- Every animation must survive `prefers-reduced-motion` (see `useReducedMotion`).
+
+---
+
+## Routes
+
+| Route | Page | Notes |
+|---|---|---|
+| `/` | Home | Hero → Position → Capabilities → Lab preview → Work → Process → CTA |
+| `/work` | Work index | Concept work, filterable |
+| `/work/:slug` | Case study | Per-project detail |
+| `/lab` | The Lab | 6 live interactive components |
+| `/contact` | Contact | EmailJS form |
+
+---
+
+## Structure
+
+```
+src/
+  three/            HawkScene (procedural relief + post chain)
+  components/
+    layout/         Nav, Footer, SmoothScroll, Grain, PageTransition
+    ui/             Type (SplitLines/Reveal/Stagger/Counter), Interactive
+                    (Cursor/Magnetic), Button (LinkButton/ActionButton/Eyebrow)
+    home/           Hero, Sections, Position, CapabilitiesSection, WorkPreview,
+                    LabPreview, ProcessSection
+    lab/            ShaderButton, MagneticGrid, MorphBlob, TokenDial,
+                    KineticType, FluidField
+    work/           Mock (six mini product UIs on a 1200×900 canvas)
+  pages/            Home, Work, WorkDetail, Lab, Contact
+  lib/              content.ts (single copy source), emailjs, utils
+  hooks/            useMotion (reducedMotion/mouse/inView/progress),
+                    usePageTitle
+scripts/            Playwright screenshot + diagnostic harnesses
+```
+
+---
+
+## Content Rules (important)
+
+- All portfolio pieces are **concept work** and are labelled as such (`kind: "Concept"`).
+- **No invented client names, logos, metrics, or testimonials.** Ever.
+  Fake proof destroys trust faster than no proof.
+- Copy is first person singular — this is one person's studio.
+- Tools the site names (React, Three.js, Figma, GSAP…) are *tools*, not clients.
+- Availability is `site.availability` in `content.ts` — the only place to edit it.
+
+## Accessibility & Performance Notes
+
+- `prefers-reduced-motion` is honoured by: Lenis (doesn't initialise), the
+  custom cursor (returns null), the 3D scene (static pose, no pointer rig),
+  every reveal, and the global CSS override in `index.css`.
+- Route bundles: home pulls three.js (698KB raw / 180KB gzip) but `/work`,
+  `/contact` and `/lab` do not. Verified with `scripts/diag-perf.mjs`.
+- All motion uses `transform` / `opacity` only. No layout-animated properties.
+- Cursor and magnetic effects write transforms in rAF and never use React state.
+
+---
+
+## The Hero Effect (how it works)
+
+`src/three/HawkScene.tsx`
+
+1. `public/nighthawk.jpeg` is sampled on the CPU into a 240×240 grid.
+2. Height comes from luminance at **two scales**, which is the whole trick:
+   - **Silhouette** — a wide box blur (radius 7, 3 passes). This is the hawk's
+     actual volume: beak, crown, cheek plates. Smooth, so normals stay clean
+     under a moving light.
+   - **Detail** — the high-frequency remainder (raw minus a light blur), scaled
+     to `DETAIL_GAIN` 0.55 so it textures the form instead of shattering it.
+3. A procedurally painted 128×64 equirectangular gradient (cool sky above,
+   sodium floor below, warm key panel one side, cool bounce the other) is run
+   through `PMREMGenerator` and set as `scene.environment`. Without this, a
+   metal has nothing to reflect and reads as flat black.
+4. Lighting: cool directional key, minimal fill, animated sodium point rim,
+   one low cyan instrument glow.
+5. Post chain: bloom (threshold 0.62) → chromatic aberration (0.00022) →
+   vignette → film grain.
+6. Camera rig responds to pointer with damped springs plus a slow handheld
+   drift, so it never looks machine-perfect.
+7. The scene is `lazy()`-loaded and only mounted after `requestIdleCallback`,
+   so it never blocks first paint. No WebGL / reduced motion → graded static
+   image fallback.
+
+This is why no `.glb` is needed, and why it still reads as 3D.
+
+---
+
+## Database Schema
+
+None. This site has no database, no auth, and no server. The only outbound
+integration is EmailJS (client-side POST, keys in `VITE_EMAILJS_*`).
+There are no migrations.
+
+---
+
+## Build / Run
+
+```bash
+npm install
+npm run dev      # vite dev server
+npm run build    # tsc -b && vite build
+npm run preview
+```
+
+PowerShell note: chain with `;` not `&&` (see `POWERSHELL-PROJECT-RULES`).
+
+---
+
+## Changelog
+
+- **Revamp v2 — "Night Operations."** Full rebuild.
+  - New palette (sodium/ember on void, cyan demoted to instrument-only) and a
+    new type system (Bricolage Grotesque + Inter Tight + JetBrains Mono).
+  - Procedural 3D hero: logo sampled into a 240² height field, blurred at two
+    scales (silhouette + detail), displaced into a relief, lit with a
+    procedural PMREM environment and a cool-key/warm-rim rig.
+  - Honest content model: all six portfolio pieces relabelled `Concept`. Every
+    invented client name, logo, metric and testimonial removed. Copy is first
+    person singular.
+  - New `/lab` section — six live interactive experiments (GPU shader button,
+    magnetic grid, noise-driven SVG morph, CSS-variable theme dial, variable
+    font kinetic type, 20k-point fluid field). Replaces the orphaned
+    `ComponentShowcase` / `HawkGallery` / `DesignSystem` / `StyleConfigurator`
+    files, which were never imported and contained mojibake emoji.
+  - Work index + per-project case study routes (`/work/:slug`).
+  - `Mock` previews rewritten on a fixed 1200×900 canvas scaled by
+    ResizeObserver, so type is crisp at any card size with zero images.
+  - Route-level code splitting. three.js (698KB) now loads **only** on `/`.
+  - framer-motion removed entirely (was pulling ~120KB for one page
+    transition). Bundle 531KB → 416KB; transitions now run instantly.
+  - Reduced-motion support throughout; WebGL falls back to a graded still.
+  - Custom cursor rewritten to read `data-cursor` intent from the DOM instead
+    of guessing from tags, with zero per-frame React state.
+  - Build, lint and typecheck all clean.
+
+### Fixed after visual review
+
+- Relief initially read as crystalline shrapnel — per-pixel luminance was
+  mapped straight to Z, so every specular edge became a spike. Resolved with
+  separable box blur at two scales.
+- Chromatic aberration was heavy enough to look broken; bloom threshold was so
+  low the whole mark glowed. Both dialled back.
+- Metal had nothing to reflect, so it read as flat black. Added a procedural
+  equirectangular environment through PMREM.
+- Lab experiments were unmounting on scroll-out, tearing down and rebuilding
+  WebGL contexts. Now mount once and stay mounted.
+- `morph-blob` was listed in content but had no component. Written.
+- Fluid field was overexposed (additive blending + 20k points + large sprites).
+- Availability text said "Q1 2026" in a November 2026 codebase; now a single
+  `site.availability` value.

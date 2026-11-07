@@ -192,6 +192,32 @@ npm run preview
 
 PowerShell note: chain with `;` not `&&` (see `POWERSHELL-PROJECT-RULES`).
 
+## Deployment
+
+- Host: **Vercel**, project `1st-nighthawk-innovations`
+- Trigger: push to `master` → auto-deploy (GitHub integration)
+- Primary domain: **https://www.1stnighthawk.com**
+  (`1stnighthawk.com` 307-redirects to the www host)
+- No `vercel.json` needed; Vite defaults are correct.
+
+⚠️ The canonical/OG URLs in `index.html` must stay on `www.1stnighthawk.com`.
+An earlier build pointed them at `1stnighthawkinnovations.com`, which does not
+resolve — that breaks SEO and social previews.
+
+### Asset policy
+
+`public/` is **111 KB** and should stay that way. It holds exactly two files:
+the favicon and `nighthawk.jpeg` (the hero source). 68.7 MB of orphaned
+gallery video and stills was archived to `.archive/` (gitignored, not deployed).
+Before adding media, check that something in `src/` actually references it —
+unreferenced `public/` files are billed as bandwidth and never seen.
+
+## Case studies
+
+`CASE-STUDY-TEMPLATE.md` defines the exact schema a real client project needs
+before it ships. All portfolio items are `kind: "Concept"` today; a real one
+becomes `kind: "Client"`.
+
 ---
 
 ## Changelog

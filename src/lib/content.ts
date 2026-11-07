@@ -10,7 +10,9 @@ export const site = {
   /** Two-line lockup used in the nav. Derived so it can never drift. */
   wordmark: { first: "1st Nighthawk", second: "Innovations" },
   short: "Nighthawk",
-  domain: "1stnighthawkinnovations.com",
+  domain: "1stnighthawk.com",
+  /** Canonical origin — www is the primary host on Vercel. */
+  url: "https://www.1stnighthawk.com",
   email: "1stnighthawkllc@gmail.com",
   phone: "+1 (904) 338-3032",
   phoneHref: "+19043383032",

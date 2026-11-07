@@ -29,3 +29,6 @@ dist-ssr
 # local audit artifacts
 .shots
 .playwright-mcp
+
+# archived assets kept locally but not deployed (see .archive/README.md)
+.archive

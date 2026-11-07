@@ -30,5 +30,8 @@ dist-ssr
 .shots
 .playwright-mcp
 
+# dev server log (survives shell detach)
+.dev-server.log
+
 # archived assets kept locally but not deployed (see .archive/README.md)
 .archive

@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { ArrowUpRight, Check, Loader2 } from "lucide-react";
+import { ArrowUpRight, Check, Loader2, Copy } from "lucide-react";
 import { Eyebrow } from "../components/ui/Button";
 import { SplitLines, Reveal } from "../components/ui/Type";
 import { site } from "../lib/content";
-import { sendContactEmail } from "../lib/emailjs";
+import {
+  sendContactEmail,
+  buildFallbackMailto,
+  isEmailConfigured,
+} from "../lib/emailjs";
 import { cn } from "../lib/utils";
 import { usePageTitle } from "../hooks/usePageTitle";
 
@@ -23,10 +27,11 @@ export default function ContactPage() {
     budget: "",
     message: "",
   });
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle",
-  );
+  const [state, setState] = useState<
+    "idle" | "sending" | "sent" | "fallback" | "error"
+  >("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [copied, setCopied] = useState(false);
 
   const validate = () => {
     const e: Record<string, string> = {};
@@ -39,13 +44,39 @@ export default function ContactPage() {
     return Object.keys(e).length === 0;
   };
 
+  /* Never dead-ends. If the automated path isn't available we hand the
+     visitor a mailto: carrying the whole message, so the lead survives. */
   const submit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     if (!validate()) return;
 
     setState("sending");
-    const ok = await sendContactEmail(form);
-    setState(ok ? "sent" : "error");
+    const result = await sendContactEmail(form);
+
+    if (result.ok) {
+      setState("sent");
+      return;
+    }
+
+    setState(result.reason === "unconfigured" ? "fallback" : "error");
+    // Open the mail client immediately in the unconfigured case — it's
+    // the only path that actually works, so don't make them hunt for it.
+    if (result.reason === "unconfigured") {
+      window.location.href = buildFallbackMailto(site.email, form);
+    }
+  };
+
+  const copySummary = async () => {
+    const text = `Name: ${form.name}\nEmail: ${form.email}\nBudget: ${
+      form.budget || "Not specified"
+    }\n\n${form.message}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard can fail on insecure origins — the mailto still works */
+    }
   };
 
   return (
@@ -117,6 +148,20 @@ export default function ContactPage() {
 
           {/* Right: the form */}
           <div>
+            {/* Direct email always offered, so nobody is dependent on the
+                form working. Quiet, not competing with the primary action. */}
+            {state === "idle" && (
+              <p className="mb-8 font-sans text-[13px] leading-relaxed text-bone/40">
+                Prefer email?{" "}
+                <a
+                  href={`mailto:${site.email}`}
+                  className="wipe text-bone/70 transition-colors hover:text-sodium"
+                >
+                  {site.email}
+                </a>
+              </p>
+            )}
+
             {state === "sent" ? (
               <div className="flex min-h-[420px] flex-col items-start justify-center border border-haze/60 bg-dusk/30 p-10">
                 <span className="grid h-11 w-11 place-items-center rounded-full bg-sodium/15">
@@ -222,11 +267,51 @@ export default function ContactPage() {
                   <span className="absolute inset-0 -translate-y-full bg-bone transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />
                 </button>
 
-                {state === "error" && (
-                  <p className="font-mono text-[10px] leading-relaxed text-ember">
-                    That didn&rsquo;t go through. Email me directly at{" "}
-                    {site.email}.
-                  </p>
+                {/* Failure paths never dead-end: the visitor always gets a
+                    working route to you, pre-filled with what they wrote. */}
+                {(state === "error" || state === "fallback") && (
+                  <div className="border border-sodium/25 bg-sodium/[0.04] p-5">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-sodium">
+                      {state === "fallback"
+                        ? "One more step"
+                        : "Couldn't send automatically"}
+                    </p>
+                    <p className="mt-2.5 font-sans text-[13px] leading-relaxed text-bone/55">
+                      {state === "fallback"
+                        ? "Your message is ready to go — your email app should have opened with everything filled in. If it didn't:"
+                        : "Your message is safe. Send it the direct way and I'll pick it up right away."}
+                    </p>
+
+                    <div className="mt-5 flex flex-wrap items-center gap-3">
+                      <a
+                        href={buildFallbackMailto(site.email, form)}
+                        className="bg-sodium px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-void transition-colors hover:bg-[#ffb055]"
+                      >
+                        Open in email
+                      </a>
+                      <button
+                        type="button"
+                        onClick={copySummary}
+                        className="flex items-center gap-2 border border-haze px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-bone/70 transition-colors hover:border-sodium/50 hover:text-bone"
+                      >
+                        <Copy className="h-3 w-3" />
+                        {copied ? "Copied" : "Copy message"}
+                      </button>
+                      <a
+                        href={`mailto:${site.email}`}
+                        className="font-mono text-[10px] uppercase tracking-[0.18em] text-mute transition-colors hover:text-bone"
+                      >
+                        {site.email}
+                      </a>
+                    </div>
+
+                    {state === "error" && (
+                      <p className="mt-4 font-mono text-[9px] leading-relaxed text-mute/50">
+                        Set {isEmailConfigured ? "valid" : "your"} EmailJS keys
+                        in .env to make this automatic.
+                      </p>
+                    )}
+                  </div>
                 )}
               </form>
             )}

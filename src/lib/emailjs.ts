@@ -1,53 +1,119 @@
 import emailjs from "@emailjs/browser";
 
-// ============================================================
-// EMAILJS CONFIGURATION
-// ============================================================
-// Set these in your .env file (see .env.example):
-//   VITE_EMAILJS_SERVICE_ID
-//   VITE_EMAILJS_TEMPLATE_ID
-//   VITE_EMAILJS_PUBLIC_KEY
-//
-// Template variables used: {{title}}, {{name}}, {{email}}, {{message}}
-// ============================================================
+/* ══════════════════════════════════════════════════════════════════
+   CONTACT DELIVERY
 
-const EMAILJS_SERVICE_ID =
-  import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID =
-  import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
-const EMAILJS_PUBLIC_KEY =
-  import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
+   Three states matter here:
 
-interface ContactFormData {
+   1. CONFIGURED  — EmailJS keys present, message posts and lands in
+      the inbox. This is the happy path.
+
+   2. UNCONFIGURED — no keys. Previously this returned `false` and the
+      visitor saw "That didn't go through", losing the lead entirely.
+      Now we fall back to a pre-filled mailto: link, which always
+      works with no backend at all.
+
+   3. FAILED — keys present but the request failed (network, quota,
+      bad template). We surface a copyable summary plus the mailto
+      fallback, so the visitor can still reach you.
+
+   Keys live in .env as VITE_EMAILJS_* and are inlined at build time.
+   They are public by design (EmailJS keys are browser-safe) — the
+   service restricts allowed origins in the EmailJS dashboard.
+   ══════════════════════════════════════════════════════════════════ */
+
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID ?? "";
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID ?? "";
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY ?? "";
+
+/** True only when all three values look real, not placeholders. */
+export const isEmailConfigured = (() => {
+  const looksReal = (v: string) =>
+    v.length > 0 && !/^(your_|YOUR_|xxx)/.test(v);
+  return (
+    looksReal(SERVICE_ID) && looksReal(TEMPLATE_ID) && looksReal(PUBLIC_KEY)
+  );
+})();
+
+export interface ContactFormData {
   name: string;
   email: string;
   budget: string;
   message: string;
 }
 
+export type SendResult =
+  | { ok: true; via: "emailjs" }
+  | { ok: false; reason: "unconfigured" | "failed"; error?: string };
+
+/**
+ * Builds a mailto: URL containing the whole enquiry, so nothing is lost
+ * when the automated path is unavailable.
+ */
+export function buildFallbackMailto(to: string, data: ContactFormData): string {
+  const subject = `Project inquiry${
+    data.budget ? ` — ${data.budget}` : ""
+  } — ${data.name}`;
+
+  const body = [
+    `Name: ${data.name}`,
+    `Email: ${data.email}`,
+    data.budget ? `Budget: ${data.budget}` : "",
+    "",
+    data.message,
+  ]
+    .filter((line) => line !== "")
+    .join("\n");
+
+  return `mailto:${to}?subject=${encodeURIComponent(
+    subject,
+  )}&body=${encodeURIComponent(body)}`;
+}
+
 export async function sendContactEmail(
   data: ContactFormData,
-): Promise<boolean> {
-  try {
-    const fullMessage = data.budget
-      ? `Budget: ${data.budget}\n\n${data.message}`
-      : data.message;
+): Promise<SendResult> {
+  // No keys — don't pretend to send. Let the UI offer the mailto fallback.
+  if (!isEmailConfigured) {
+    return { ok: false, reason: "unconfigured" };
+  }
 
+  try {
     const result = await emailjs.send(
-      EMAILJS_SERVICE_ID,
-      EMAILJS_TEMPLATE_ID,
+      SERVICE_ID,
+      TEMPLATE_ID,
       {
-        title: `New Project Inquiry from ${data.name}`,
+        // Every common template variable name, so the template works
+        // whether it was authored with {{from_name}} or {{name}}.
+        from_name: data.name,
         name: data.name,
+        reply_to: data.email,
         email: data.email,
-        message: fullMessage,
+        budget: data.budget || "Not specified",
+        message: data.message,
+        title: `New project inquiry from ${data.name}`,
+        // Compact single-line summary for templates that only have one field.
+        summary: `${data.name} <${data.email}> · ${
+          data.budget || "budget TBD"
+        } — ${data.message.slice(0, 240)}`,
+        sent_at: new Date().toLocaleString("en-US", {
+          timeZone: "America/New_York",
+        }),
       },
-      EMAILJS_PUBLIC_KEY,
+      { publicKey: PUBLIC_KEY },
     );
 
-    return result.status === 200;
-  } catch (error) {
-    console.error("EmailJS error:", error);
-    return false;
+    if (result.status === 200) return { ok: true, via: "emailjs" };
+
+    return { ok: false, reason: "failed", error: `HTTP ${result.status}` };
+  } catch (err) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : typeof err === "string"
+          ? err
+          : "Unknown error";
+    console.error("[contact] EmailJS send failed:", message);
+    return { ok: false, reason: "failed", error: message };
   }
 }

@@ -123,6 +123,41 @@ EmailJS.
 
 ---
 
+## Troubleshooting
+
+### `412 Gmail_API: Invalid grant. Please reconnect your Gmail account`
+
+The keys are fine — your **Gmail connection inside EmailJS has expired**. Google
+invalidates the OAuth grant when the account password changes, a security event
+occurs, or the token ages out.
+
+Fix: EmailJS dashboard → **Email Services** → your Gmail service → **Reconnect**.
+You can confirm the state from the console: the failed request goes to
+`https://api.emailjs.com/api/v1.0/email/send` and returns 412 with that message.
+
+This is the most common EmailJS failure and it is always on the provider side,
+never in the site code.
+
+### `412` or `403` with a domain/origin message
+
+Your allowed-origin list doesn't include the host you're sending from. Add
+`http://localhost:5173` for local work and `https://www.1stnighthawk.com` for
+production.
+
+### Site still uses the mailto fallback after adding keys
+
+Vite inlines `VITE_*` at **startup**, so a running dev server keeps the old
+values. Restart it. In production, environment variables only apply to *new*
+deployments — redeploy after changing them in Vercel.
+
+### Confirming the keys loaded
+
+The console will show `isEmailConfigured: true` when all three values are
+present and none start with `your_`. If it's false, one key is missing or is
+still a placeholder.
+
+---
+
 ## What the form does in each state
 
 | Situation | Behaviour |

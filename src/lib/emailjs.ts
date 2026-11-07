@@ -107,13 +107,15 @@ export async function sendContactEmail(
 
     return { ok: false, reason: "failed", error: `HTTP ${result.status}` };
   } catch (err) {
-    const message =
-      err instanceof Error
-        ? err.message
-        : typeof err === "string"
-          ? err
-          : "Unknown error";
-    console.error("[contact] EmailJS send failed:", message);
-    return { ok: false, reason: "failed", error: message };
+    /* EmailJS rejects with an EmailJSResponseStatus, not an Error — it has
+       `.status` and `.text`. Reading `err.message` alone produced the useless
+       string "Unknown error" and hid the actual cause. */
+    const detail =
+      (err as { text?: string })?.text ??
+      (err as { message?: string })?.message ??
+      (typeof err === "string" ? err : JSON.stringify(err));
+
+    console.error("[contact] EmailJS send failed:", detail);
+    return { ok: false, reason: "failed", error: detail };
   }
 }

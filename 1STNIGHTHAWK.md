@@ -206,17 +206,38 @@ resolve — that breaks SEO and social previews.
 
 ### Asset policy
 
-`public/` is **111 KB** and should stay that way. It holds exactly two files:
-the favicon and `nighthawk.jpeg` (the hero source). 68.7 MB of orphaned
-gallery video and stills was archived to `.archive/` (gitignored, not deployed).
-Before adding media, check that something in `src/` actually references it —
-unreferenced `public/` files are billed as bandwidth and never seen.
+`public/` is **111 KB + case study screenshots** and should stay lean. It holds
+the favicon, `nighthawk.jpeg` (hero source), and `work/<slug>/` screenshots for
+real client work. 68.7 MB of orphaned gallery video and stills was archived to
+`.archive/` (gitignored, not deployed). Before adding media, check that
+something in `src/` actually references it — unreferenced `public/` files are
+billed as bandwidth and never seen.
+
+### Contact form delivery
+
+`VITE_EMAILJS_*` keys live in `.env` locally and in **Vercel → Settings →
+Environment Variables** (all three targets). Vite inlines them at build time, so
+changing them requires a rebuild — an existing deployment keeps the old values.
+
+Behaviour: configured + success → confirmation. Configured + failure → yellow
+panel with "Open in email" / "Copy message". Not configured → mailto fallback
+opens immediately. **The enquiry is never lost in any state.**
+
+Known provider-side failure: `412 Gmail_API: Invalid grant` means the Gmail
+connection inside EmailJS expired. Fix in the EmailJS dashboard, not in code.
+Full walkthrough and troubleshooting in `EMAILJS-SETUP.md`.
 
 ## Case studies
 
 `CASE-STUDY-TEMPLATE.md` defines the exact schema a real client project needs
-before it ships. All portfolio items are `kind: "Concept"` today; a real one
-becomes `kind: "Client"`.
+before it ships. Projects are `kind: "Client" | "Concept"`. Client work renders
+real screenshots from `public/work/<slug>/` and shows the problem / results /
+reflection sections; concepts keep the DOM mock and are labelled as concepts.
+
+**First client case study: Grace & Gray Mercantile** (`/work/grace-and-gray`),
+sourced from `C:\sourceCode\graceandgray` — Astro 5 + Wix/Cloudflare, 29 pages,
+landing mode with the storefront held behind an env flag pending Square
+inventory work.
 
 ---
 

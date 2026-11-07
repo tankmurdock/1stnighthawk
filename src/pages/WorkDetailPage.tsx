@@ -44,6 +44,12 @@ export default function WorkDetailPage() {
           >
             {project.kind === "Client" ? "Client work" : "Concept"}
           </span>
+          {/* Status keeps us honest about what is actually shipped. */}
+          {project.status && (
+            <span className="border border-ice/40 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-ice/80">
+              {project.status}
+            </span>
+          )}
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-mute">
             {project.discipline}
           </span>
@@ -158,7 +164,11 @@ export default function WorkDetailPage() {
 
             {project.results && (
               <Reveal delay={0.2} className="mt-12">
-                <p className="label mb-5 text-sodium/60">What shipped</p>
+                <p className="label mb-5 text-sodium/60">
+                  {project.status === "Working prototype"
+                    ? "What's built"
+                    : "What shipped"}
+                </p>
                 <div className="grid grid-cols-2 gap-px overflow-hidden border border-haze/50 bg-haze/40">
                   {project.results.map((r) => (
                     <div key={r.label} className="bg-abyss px-5 py-6">

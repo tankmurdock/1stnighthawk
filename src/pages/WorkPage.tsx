@@ -172,6 +172,11 @@ export default function WorkPage() {
                     >
                       {p.kind}
                     </span>
+                    {p.status && (
+                      <span className="border border-ice/40 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.16em] text-ice/80">
+                        {p.status}
+                      </span>
+                    )}
                   </div>
                   <p
                     className={cn(

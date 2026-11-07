@@ -230,14 +230,29 @@ Full walkthrough and troubleshooting in `EMAILJS-SETUP.md`.
 ## Case studies
 
 `CASE-STUDY-TEMPLATE.md` defines the exact schema a real client project needs
-before it ships. Projects are `kind: "Client" | "Concept"`. Client work renders
-real screenshots from `public/work/<slug>/` and shows the problem / results /
-reflection sections; concepts keep the DOM mock and are labelled as concepts.
+before it ships. Projects are `kind: "Client" | "Concept"` plus an optional
+`status` string. Client work renders real screenshots from
+`public/work/<slug>/` and shows the problem / results / reflection sections;
+concepts keep the DOM mock and are labelled as concepts.
 
-**First client case study: Grace & Gray Mercantile** (`/work/grace-and-gray`),
-sourced from `C:\sourceCode\graceandgray` — Astro 5 + Wix/Cloudflare, 29 pages,
-landing mode with the storefront held behind an env flag pending Square
-inventory work.
+Two client studies live today:
+
+1. **Grace & Gray Mercantile** (`/work/grace-and-gray`, status *Live*) —
+   Astro 5 + Wix/Cloudflare storefront, 29 pages, commerce held behind an env
+   flag pending Square inventory. Source: `C:\sourceCode\graceandgray`.
+2. **Grace & Gray Intake** (`/work/gg-intake`, status *Working prototype*) —
+   mobile-first scanning/intake app. Source:
+   `C:\sourceCode\square-inventory-intake`.
+
+### Honesty rules for client studies
+
+- `status` must reflect reality. A prototype is labelled *Working prototype*,
+  never "live", and the results heading switches from "What shipped" to
+  "What's built" when it isn't shipped.
+- Never claim a capability the source project documents as unverified.
+  The intake app explicitly has not been tested on the owner's hardware or
+  against real Quail labels, and the case study says so.
+- Metrics come from the repo (test counts, module counts), not from invention.
 
 ---
 

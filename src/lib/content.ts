@@ -72,6 +72,8 @@ export type Project = {
   title: string;
   /** "Client" work is real and shipped. "Concept" is self-directed. */
   kind: "Client" | "Concept";
+  /** Explicit status so we never imply more than is true. */
+  status?: string;
   discipline: string;
   year: string;
   summary: string;
@@ -97,6 +99,7 @@ export const projects: Project[] = [
     slug: "grace-and-gray",
     title: "Grace & Gray Mercantile",
     kind: "Client",
+    status: "Live",
     discipline: "Brand & Web",
     year: "2026",
     summary:
@@ -145,6 +148,61 @@ export const projects: Project[] = [
     ],
     accent: "#c8bda8",
     preview: 1,
+  },
+  {
+    slug: "gg-intake",
+    title: "Grace & Gray Intake",
+    kind: "Client",
+    status: "Working prototype",
+    discipline: "Product Design",
+    year: "2026",
+    summary:
+      "A scanning and intake tool for a retail floor, where the operator is holding an item in one hand and an iPad in the other — built to replace a paper ledger without pretending Square integration already exists.",
+    premise:
+      "Grace & Gray tracks inventory on paper and labels stock with a Quail printer. Those labels carry only numeric identifiers, so every item still needs its name, price, category, quantity and photos captured by hand. The owner is moving to Square as the single source of truth, but real inventory has to exist before anything can sync — so the intake step is the actual bottleneck, not the storefront.",
+    problem:
+      "The existing workflow is a paper ledger plus Quail labels plus a separate spreadsheet. Nothing reconciles, duplicates get entered twice, prices are typed from memory, and a one-off item has no reliable record of what it looked like when it was shelved.",
+    approach: [
+      "Designed for one thumb and a shop floor, not a desktop dashboard. A single scrolling intake path — scan, photograph, describe, save, next — with the primary action always reachable at the bottom of the screen.",
+      "Treated barcodes as opaque strings and never normalised them. Leading zeros are preserved and `Number()` is banned: the moment you parse a label as an integer, you silently corrupt every SKU in the business. Validation is advisory until real Quail labels have been decoded.",
+      "Kept money as integer cents and banned `parseFloat` with a lint rule. Price is parsed from the string, because `0.1 + 0.2` on a $68 shirt is a rounding dispute with the owner.",
+      "Built duplicate handling as an explicit decision, not a silent overwrite. Scanning a known barcode offers quantity-add, inspect, or save-separate — and the only field quantity-add may touch is quantity.",
+      "Put the domain rules in a pure layer with no DOM, IndexedDB or fetch, so the same validation can run server-side when Square integration lands. The client is a prototype; the rules are not throwaway.",
+      "Refused to claim capability that hasn't been proven. The UI states plainly that camera scanning and Bluetooth scanner behaviour are unverified on the owner's hardware, and that publishing is a separate, unapproved gate.",
+    ],
+    results: [
+      { label: "Automated tests", value: "361" },
+      { label: "Domain modules", value: "9 pure" },
+      { label: "Data loss paths", value: "Zero by design" },
+      { label: "Square writes", value: "None yet" },
+    ],
+    reflection:
+      "The hardest discipline was not building the interesting part. Square sync is the thing that would look impressive in a demo, but the app has not been tested on the actual iPad and nobody has decoded a real Quail label yet — so a sync feature would be guessing at a schema. Milestone 2 is deliberately boring device validation, and skipping it is how you end up re-importing a thousand products twice.",
+    media: [
+      {
+        src: "/work/gg-intake/inventory.jpg",
+        alt: "Local inventory list showing three intake drafts with totals, filters and per-item actions",
+      },
+      {
+        src: "/work/gg-intake/intake.jpg",
+        alt: "The intake form — barcode capture, then product details in one scroll",
+      },
+      {
+        src: "/work/gg-intake/data.jpg",
+        alt: "The data screen for JSON backup and CSV export",
+      },
+      {
+        src: "/work/gg-intake/desktop.jpg",
+        alt: "The same inventory view at desktop width",
+      },
+    ],
+    craft: [
+      { label: "Stack", value: "Astro 7 · Preact · TS strict" },
+      { label: "Storage", value: "IndexedDB via ports" },
+      { label: "Scanning", value: "zxing + keyboard heuristic" },
+    ],
+    accent: "#b08d6a",
+    preview: 2,
   },
   {
     slug: "meridian",

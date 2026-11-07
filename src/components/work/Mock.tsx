@@ -32,7 +32,14 @@ function Frame({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div ref={wrapRef} className="relative h-full w-full overflow-hidden">
+    /* These are decorative miniatures of products, not real UI. Hiding the
+       whole tree stops screen readers announcing a fake page structure
+       (navs, mains, headings) inside a thumbnail. */
+    <div
+      ref={wrapRef}
+      className="relative h-full w-full overflow-hidden"
+      aria-hidden="true"
+    >
       <div
         className="absolute left-0 top-0 select-none"
         style={{
@@ -93,11 +100,11 @@ function Meridian() {
         <div className="h-px w-full bg-[#c8a678]/25" />
 
         <div className="mt-16 max-w-[78%]">
-          <h1 className="font-display text-[84px] font-light leading-[1.02] tracking-[-0.025em] text-[#f2ece1]">
+          <div className="font-display text-[84px] font-light leading-[1.02] tracking-[-0.025em] text-[#f2ece1]">
             Long horizon
             <br />
             capital.
-          </h1>
+          </div>
           <p className="mt-9 max-w-[62%] text-[17px] leading-[1.85] text-[#8b8070]">
             Patient investment in businesses that compound quietly, over decades
             rather than quarters.
@@ -193,9 +200,9 @@ function Vantage() {
             <div className="text-[11px] uppercase tracking-[0.24em] text-[#456072]">
               Operations
             </div>
-            <h1 className="mt-2 font-display text-[26px] font-medium text-[#d6e5ef]">
+            <div className="mt-2 font-display text-[26px] font-medium text-[#d6e5ef]">
               Dispatch queue
-            </h1>
+            </div>
           </div>
           <span className="rounded-md bg-ice/10 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-ice">
             4 need attention
@@ -407,9 +414,9 @@ function Kiln() {
 
       <main className="flex-1 p-9">
         <div className="flex items-center justify-between">
-          <h1 className="font-display text-[24px] font-medium text-[#e4d3c4]">
+          <div className="font-display text-[24px] font-medium text-[#e4d3c4]">
             Tokens
-          </h1>
+          </div>
           <span className="font-mono text-[11px] text-[#5c4a3d]">
             410 total
           </span>

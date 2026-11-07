@@ -25,8 +25,15 @@
       property="og:description"
       content="Design that holds up in the dark. Interface design, design systems, React engineering, and real-time 3D — by one person, end to end."
     />
-    <meta property="og:image" content="https://www.1stnighthawk.com/nighthawk.jpeg" />
+    <meta property="og:image" content="https://www.1stnighthawk.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="1st Nighthawk Innovations — design that holds up in the dark"
+    />
     <meta property="og:url" content="https://www.1stnighthawk.com/" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -38,11 +45,79 @@
       name="twitter:description"
       content="Design that holds up in the dark. Interface design, design systems, React engineering, and real-time 3D."
     />
-    <meta name="twitter:image" content="https://www.1stnighthawk.com/nighthawk.jpeg" />
+    <meta name="twitter:image" content="https://www.1stnighthawk.com/og-image.jpg" />
+    <meta
+      name="twitter:image:alt"
+      content="1st Nighthawk Innovations — design that holds up in the dark"
+    />
 
     <!-- Fonts: preconnect shaves ~100ms off first paint -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Structured data. Tells search engines this is a person running a
+         studio in a specific city, which is what local intent searches hit. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://www.1stnighthawk.com/#person",
+            "name": "1st Nighthawk Innovations",
+            "jobTitle": "Product Designer & Front-End Engineer",
+            "url": "https://www.1stnighthawk.com",
+            "email": "mailto:1stnighthawkllc@gmail.com",
+            "telephone": "+1-904-338-3032",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Jacksonville",
+              "addressRegion": "FL",
+              "addressCountry": "US"
+            },
+            "knowsAbout": [
+              "Product Design",
+              "Design Systems",
+              "Front-End Engineering",
+              "React",
+              "TypeScript",
+              "WebGL",
+              "Accessibility"
+            ],
+            "sameAs": ["https://github.com/tankmurdock"]
+          },
+          {
+            "@type": "ProfessionalService",
+            "@id": "https://www.1stnighthawk.com/#business",
+            "name": "1st Nighthawk Innovations",
+            "description": "Product design and front-end engineering. Interface design, design systems, React development, and real-time 3D — delivered end to end by one person.",
+            "url": "https://www.1stnighthawk.com",
+            "image": "https://www.1stnighthawk.com/nighthawk.jpeg",
+            "email": "1stnighthawkllc@gmail.com",
+            "telephone": "+1-904-338-3032",
+            "priceRange": "$$",
+            "areaServed": {
+              "@type": "City",
+              "name": "Jacksonville"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Jacksonville",
+              "addressRegion": "FL",
+              "addressCountry": "US"
+            },
+            "founder": { "@id": "https://www.1stnighthawk.com/#person" }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://www.1stnighthawk.com/#website",
+            "url": "https://www.1stnighthawk.com",
+            "name": "1st Nighthawk Innovations",
+            "publisher": { "@id": "https://www.1stnighthawk.com/#business" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

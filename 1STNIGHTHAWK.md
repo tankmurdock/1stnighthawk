@@ -223,6 +223,13 @@ PowerShell note: chain with `;` not `&&` (see `POWERSHELL-PROJECT-RULES`).
 
 ### Fixed after review
 
+- **Filtered work looked like it wasn't rendering.** The filter logic was
+  correct — every discipline returns its card at opacity 1. The problem was
+  layout: each discipline has exactly one project, and a single card in a
+  two-column grid left a hole that was filled by the grid's own `bg-haze`
+  panel, so it read as a failed load. Now a single result renders as a
+  full-width feature card, filters show their counts, and a "1 study in X"
+  label sets the expectation before you click.
 - **The custom cursor never hid the native one.** There was no `cursor: none`
   anywhere, so desktop visitors saw the OS arrow *plus* a dot *plus* a lagging
   ring — three cursors at once. The real fix was scoping: the cursor now lives

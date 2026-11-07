@@ -6,7 +6,12 @@ import { projects } from "../../lib/content";
 import Mock from "../work/Mock";
 
 export default function WorkPreview() {
-  const featured = projects.slice(0, 3);
+  // Lead with real client work, then fill with concepts.
+  const client = projects.filter((p) => p.kind === "Client");
+  const featured = [
+    ...client,
+    ...projects.filter((p) => p.kind === "Concept"),
+  ].slice(0, 3);
 
   return (
     <section className="relative border-t border-haze/40 bg-void py-24 sm:py-32">
@@ -34,9 +39,9 @@ export default function WorkPreview() {
 
         <Reveal delay={0.15} className="mt-8">
           <p className="max-w-2xl font-sans text-sm leading-relaxed text-bone/40">
-            These are self-directed concepts, not client engagements — labelled
-            as such on purpose. What they demonstrate is the work itself: the
-            thinking, the systems, and the craft in the build.
+            Real client work sits alongside self-directed studies. Concept
+            pieces are labelled as such — I&rsquo;d rather show the thinking
+            honestly than dress up a mockup as a case study.
           </p>
         </Reveal>
 
@@ -49,15 +54,31 @@ export default function WorkPreview() {
                 className="group relative block bg-void p-1 transition-colors duration-500 hover:bg-dusk"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-abyss">
-                  <div className="absolute inset-0 transition-transform duration-[1.1s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]">
-                    <Mock id={p.preview} />
-                  </div>
+                  {p.media?.length ? (
+                    <img
+                      src={p.media[0].src}
+                      alt={p.media[0].alt}
+                      loading="lazy"
+                      className="h-full w-full object-cover object-top transition-transform duration-[1.1s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 transition-transform duration-[1.1s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]">
+                      <Mock id={p.preview} />
+                    </div>
+                  )}
+
+                  {/* real-client badge, top-left of the image */}
+                  {p.kind === "Client" && (
+                    <span className="absolute left-3 top-3 border border-sodium/60 bg-void/80 px-2 py-1 font-mono text-[8px] uppercase tracking-[0.16em] text-sodium backdrop-blur-sm">
+                      Client
+                    </span>
+                  )}
 
                   {/* hover veil */}
                   <div className="absolute inset-0 bg-void/50 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-500 group-hover:opacity-100">
                     <span className="flex items-center gap-2 border border-bone/30 bg-void/60 px-4 py-2 font-mono text-[9px] uppercase tracking-[0.2em] text-bone backdrop-blur-sm">
-                      Open study
+                      {p.kind === "Client" ? "View project" : "Open study"}
                       <ArrowUpRight className="h-3 w-3" />
                     </span>
                   </div>

@@ -41,14 +41,13 @@ export default function WorkPage() {
 
         <Reveal delay={0.3} className="mt-8 max-w-2xl space-y-4">
           <p className="font-sans text-[15px] leading-[1.8] text-bone/55">
-            These are self-directed concepts. No client briefs, no invented
-            logos, no metrics I can&rsquo;t prove. Each one starts from a
-            specific problem and is judged on whether the design actually solves
-            it.
+            Real client work and self-directed studies, kept in the same room
+            but labelled honestly. Everything here starts from a specific
+            problem and is judged on whether the design actually solves it.
           </p>
           <p className="font-sans text-[14px] leading-[1.8] text-bone/35">
-            Client work is available on request — some of it is under NDA, which
-            is its own kind of proof.
+            No invented logos, no metrics I can&rsquo;t defend. Where a project
+            is a concept, it says so.
           </p>
         </Reveal>
       </section>
@@ -123,9 +122,20 @@ export default function WorkPage() {
                     : "aspect-[4/3]",
                 )}
               >
-                <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.035]">
-                  <Mock id={p.preview} />
-                </div>
+                {/* Real client work gets real screenshots; concepts fall
+                    back to the hand-built DOM mock. */}
+                {p.media?.length ? (
+                  <img
+                    src={p.media[0].src}
+                    alt={p.media[0].alt}
+                    loading="lazy"
+                    className="h-full w-full object-cover object-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.035]"
+                  />
+                ) : (
+                  <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.035]">
+                    <Mock id={p.preview} />
+                  </div>
+                )}
 
                 <div className="absolute inset-0 bg-void/45 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-500 group-hover:opacity-100">
@@ -152,7 +162,14 @@ export default function WorkPage() {
                     >
                       {p.title}
                     </h2>
-                    <span className="border border-haze/70 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.16em] text-mute">
+                    <span
+                      className={cn(
+                        "border px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.16em]",
+                        p.kind === "Client"
+                          ? "border-sodium/60 bg-sodium/10 text-sodium"
+                          : "border-haze/70 text-mute",
+                      )}
+                    >
                       {p.kind}
                     </span>
                   </div>
@@ -167,7 +184,9 @@ export default function WorkPage() {
 
                   {isSolo && (
                     <span className="mt-6 inline-flex items-center gap-2 border-b border-sodium/30 pb-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-sodium">
-                      Read the study
+                      {p.kind === "Client"
+                        ? "Read the case study"
+                        : "Read the study"}
                       <ArrowUpRight className="h-3 w-3 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </span>
                   )}

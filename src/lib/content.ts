@@ -70,18 +70,82 @@ export const capabilities = [
 export type Project = {
   slug: string;
   title: string;
-  kind: "Concept";
+  /** "Client" work is real and shipped. "Concept" is self-directed. */
+  kind: "Client" | "Concept";
   discipline: string;
   year: string;
   summary: string;
   premise: string;
+  /** What was actually broken, in concrete terms. */
+  problem?: string;
   approach: string[];
   craft: { label: string; value: string }[];
+  /** What changed as a result. Only facts that can be defended. */
+  results?: { label: string; value: string }[];
+  /** What didn't work, or what would be done differently. */
+  reflection?: string;
+  liveUrl?: string;
+  /** Screenshots in public/work/<slug>/. First one is the card image. */
+  media?: { src: string; alt: string }[];
   accent: string;
+  /** Fallback for the DOM mock, used when there is no media. */
   preview: 1 | 2 | 3 | 4 | 5 | 6;
 };
 
 export const projects: Project[] = [
+  {
+    slug: "grace-and-gray",
+    title: "Grace & Gray Mercantile",
+    kind: "Client",
+    discipline: "Brand & Web",
+    year: "2026",
+    summary:
+      "A boutique storefront in Avondale, Jacksonville — launched as a brand site first, commerce deliberately held back until the inventory work is ready.",
+    premise:
+      "A neighbourhood boutique moving from an Instagram presence to its own home on the web. The owner sells one-off pieces and small quantities, tracks stock on paper, and takes payments through Square. The real constraint wasn't design — it was sequencing: a public brand site could ship in weeks, but online commerce had to wait on getting inventory right.",
+    problem:
+      "Every sale ran through Instagram DMs and the physical shop. There was no canonical place for hours, location, or the story that makes an independent boutique worth visiting over a chain — and the owner had no way to update any of it herself.",
+    approach: [
+      "Shipped the brand experience first and built commerce second, rather than launching a half-working shop. The site announces online shopping is coming instead of hiding an empty cart.",
+      "Editorial restraint over storefront density — Playfair Display, a warm monochrome palette, and photography given room to breathe. A boutique should feel like a shop window, not a grid of SKUs.",
+      "Landing mode is a build-time flag, not a redesign. The full storefront, four collections and eighteen product pages already exist behind it, so turning commerce on is a config change rather than a rebuild.",
+      "Kept stock honestly at zero across the catalogue and removed preorder affordances. A shop that can't fulfil an order shouldn't imply it can.",
+    ],
+    results: [
+      { label: "Pages shipped", value: "29" },
+      { label: "Collections ready", value: "4" },
+      { label: "Product routes wired", value: "18" },
+      { label: "Mode switch", value: "One env var" },
+    ],
+    reflection:
+      "The honest lesson was sequencing. I could have built the storefront first because it's the more impressive artefact, but the owner doesn't have clean inventory data yet — so a working cart would have been a demo, not a business. Holding commerce back until Square is authoritative was the right call and a slower-looking one.",
+    liveUrl: "https://graceandgraymercantile.com",
+    media: [
+      {
+        src: "/work/grace-and-gray/hero.jpg",
+        alt: "Grace & Gray Mercantile homepage — 'Style with Character' over a boutique interior",
+      },
+      {
+        src: "/work/grace-and-gray/mobile.jpg",
+        alt: "Grace & Gray Mercantile on a phone — responsive homepage",
+      },
+      {
+        src: "/work/grace-and-gray/about.jpg",
+        alt: "The About page telling the boutique's story",
+      },
+      {
+        src: "/work/grace-and-gray/visit.jpg",
+        alt: "The Visit page with address, hours and directions",
+      },
+    ],
+    craft: [
+      { label: "Stack", value: "Astro 5 · TypeScript" },
+      { label: "Catalog", value: "Square-ready" },
+      { label: "Motion", value: "GSAP, reduced-motion safe" },
+    ],
+    accent: "#c8bda8",
+    preview: 1,
+  },
   {
     slug: "meridian",
     title: "Meridian",

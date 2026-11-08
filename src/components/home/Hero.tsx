@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowDown } from "lucide-react";
 import { site } from "../../lib/content";
@@ -17,7 +17,6 @@ type IdleWindow = Window & {
 export default function Hero() {
   const reduced = useReducedMotion();
   const [mounted, setMounted] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
   const [time, setTime] = useState("");
 
   // Hold the 3D until the browser is idle so first paint is instant.
@@ -34,21 +33,85 @@ export default function Hero() {
     return () => clearTimeout(t);
   }, []);
 
+  /* Scroll-linked recession, applied straight to the DOM.
+
+     This used to call setScrollY on every scroll frame. That re-rendered
+     the whole Hero — including the WebGL Suspense subtree — up to 60 times
+     a second, while Lenis was already running its own rAF loop and the
+     three.js loop was rendering on top of both. Desktop had the headroom to
+     hide it; phones did not, and the result was a jerky first scroll, which
+     is exactly where this effect is visible.
+
+     Writing transforms to refs instead means scrolling costs one style write
+     per frame and zero React work.
+
+     The mark gets special handling. It wraps a full-viewport WebGL canvas,
+     so animating its opacity or transform forces the compositor to re-blend
+     a screen-sized alpha layer on top of a canvas that is *already*
+     repainting every frame — the two costs stack. On touch devices the mark
+     therefore stays static and only the text recedes; the visual difference
+     is negligible because the hero is leaving the viewport anyway, and it
+     removes the most expensive thing on the frame. */
+  const markRef = useRef<HTMLDivElement | null>(null);
+  const metaRef = useRef<HTMLDivElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
+    if (reduced) return;
+
+    // Coarse pointer means a touch device, where compositing headroom is
+    // thinnest and the canvas is the largest layer on screen.
+    const coarse =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(pointer: coarse)").matches;
+
+    const FADE_DISTANCE = 560;
     let frame = 0;
-    const onScroll = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(() => {
-        setScrollY(window.scrollY);
-        frame = 0;
-      });
+    let last = -1;
+
+    const apply = () => {
+      frame = 0;
+      const y = window.scrollY;
+
+      // Past the fade distance every value is pinned; skip the writes.
+      const clamped = Math.min(y, FADE_DISTANCE);
+      if (clamped === last) return;
+      last = clamped;
+
+      const fade = clamped / FADE_DISTANCE;
+      const lift = clamped * 0.22;
+
+      if (!coarse && markRef.current) {
+        markRef.current.style.transform = `translate3d(0, ${(lift * 0.35).toFixed(1)}px, 0)`;
+        markRef.current.style.opacity = (1 - fade * 0.55).toFixed(3);
+      }
+      if (metaRef.current) {
+        metaRef.current.style.opacity = Math.max(0, 1 - fade * 1.6).toFixed(3);
+      }
+      if (contentRef.current) {
+        // Opacity only on touch: a moving transform on a big text block
+        // forces it to be re-rastered, and at these sizes that shows up as
+        // shimmer on the glyph edges.
+        if (coarse) {
+          contentRef.current.style.opacity = (1 - fade).toFixed(3);
+        } else {
+          contentRef.current.style.transform = `translate3d(0, ${(-lift).toFixed(1)}px, 0)`;
+          contentRef.current.style.opacity = (1 - fade).toFixed(3);
+        }
+      }
     };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(apply);
+    };
+
+    apply();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [reduced]);
 
   // local time in the studio — a small, human detail
   useEffect(() => {
@@ -67,10 +130,6 @@ export default function Hero() {
     return () => clearInterval(id);
   }, []);
 
-  // content recedes as you scroll — the camera "leaves" the mark behind
-  const fade = reduced ? 0 : Math.min(1, scrollY / 560);
-  const lift = reduced ? 0 : scrollY * 0.22;
-
   return (
     <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-void">
       {/* ── 3D layer ─────────────────────────────────────────────────
@@ -79,11 +138,8 @@ export default function Hero() {
           by the scrim below, so the headline sits on its dark lower half
           instead of being pushed into a bright hotspot. */}
       <div
+        ref={markRef}
         className="absolute inset-0 z-0 h-full w-full"
-        style={{
-          transform: `translateY(${lift * 0.35}px)`,
-          opacity: 1 - fade * 0.55,
-        }}
       >
         {mounted ? (
           <Suspense fallback={<SceneFallback />}>
@@ -139,11 +195,8 @@ export default function Hero() {
 
       {/* ── Top meta rails ───────────────────────────────────────── */}
       <div
+        ref={metaRef}
         className="pointer-events-none absolute inset-x-0 top-[84px] z-20 hidden justify-between px-8 sm:flex lg:px-12"
-        style={{
-          opacity: Math.max(0, 1 - fade * 1.6),
-          transition: "opacity 0.2s linear",
-        }}
       >
         <div className="flex items-center gap-2.5">
           {site.available && (
@@ -165,11 +218,8 @@ export default function Hero() {
 
       {/* ── Content ───────────────────────────────────────────────── */}
       <div
+        ref={contentRef}
         className="relative z-20 flex flex-1 flex-col justify-end px-6 pb-10 md:px-8 md:pb-20 lg:px-12 short:pb-5"
-        style={{
-          transform: `translateY(${-lift}px)`,
-          opacity: 1 - fade,
-        }}
       >
         {/* Backdrop that travels with the text. A viewport-anchored scrim
             can't guarantee coverage because the block's height changes with
@@ -245,8 +295,8 @@ export default function Hero() {
             }}
           >
             <p className="max-w-md font-sans text-[14px] leading-relaxed text-bone/55 sm:text-[15px] short:max-w-xs short:text-[11px] short:leading-snug">
-              {site.role} in {site.location}. I design the interface and then
-              build it — motion, 3D and design system included. No handoff gap.
+              {site.intro}{" "}
+              <span className="text-bone/40">{site.location}.</span>
             </p>
 
             <div className="flex flex-wrap items-center gap-2 min-[380px]:gap-3">

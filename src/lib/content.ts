@@ -17,7 +17,11 @@ export const site = {
   phone: "+1 (904) 338-3032",
   phoneHref: "+19043383032",
   location: "Jacksonville, Florida",
-  role: "Product Designer & Front-End Engineer",
+  role: "Design Engineer",
+  /** Hero lede. Leads with the rare thing (one person designs *and* builds)
+      rather than restating the job title the headline already implies. */
+  intro:
+    "I design interfaces and build them myself — motion, real-time 3D, design systems. No handoff gap.",
   tagline: "Design that holds up when the lights go out.",
   available: true,
   /** Shown in the hero and contact page. Update this one value. */
@@ -54,7 +58,7 @@ export const capabilities = [
   {
     n: "03",
     title: "Front-End Engineering",
-    body: "React and TypeScript, built to keep the design intact after handoff. Accessibility and performance treated as features, not cleanup.",
+    body: "React and TypeScript in the same pair of hands that drew the design, so nothing gets lost translating it. Accessibility and performance treated as features, not cleanup.",
     items: ["React / TS", "Tailwind", "Accessibility", "Performance"],
   },
   {

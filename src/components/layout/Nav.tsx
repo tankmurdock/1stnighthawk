@@ -12,17 +12,40 @@ export default function Nav() {
 
   useEffect(() => {
     let last = window.scrollY;
+    let raf = 0;
+    // Mirrors of the state so we can skip renders when nothing changed.
+    // Without this, setScrolled/setHidden fire on every scroll event even
+    // when the boolean is identical, re-rendering the header continuously
+    // during the hero fade — the exact moment that feels jerky.
+    let curScrolled = false;
+    let curHidden = false;
 
     const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 32);
-      // only hide when moving down, and never near the top
-      setHidden(y > last && y > 320);
-      last = y;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const y = window.scrollY;
+        const nextScrolled = y > 32;
+        // only hide when moving down, and never near the top
+        const nextHidden = y > last && y > 320;
+        last = y;
+
+        if (nextScrolled !== curScrolled) {
+          curScrolled = nextScrolled;
+          setScrolled(nextScrolled);
+        }
+        if (nextHidden !== curHidden) {
+          curHidden = nextHidden;
+          setHidden(nextHidden);
+        }
+      });
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
 
   useEffect(() => {

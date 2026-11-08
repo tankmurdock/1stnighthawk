@@ -234,6 +234,49 @@ desktop layout in 390px of height and the CTAs fall below the fold.
 Used in `Hero.tsx` to shrink the headline clamp, tighten the spacing, and drop
 the CTA padding. Both buttons stay in the fold down to 320×568.
 
+### Scroll performance (why the first scroll used to judder)
+
+The hero's recession used to be React state: a scroll listener called
+`setScrollY`, which re-rendered the whole `Hero` — including the WebGL
+`Suspense` subtree — on every scroll frame. Lenis was already running an rAF
+loop and three.js was rendering on top of both, so the main thread had three
+consumers competing. Desktop had the headroom to absorb it; phones did not.
+
+Four changes, each measured:
+
+1. **The fade writes to the DOM, not to state.** `markRef` / `metaRef` /
+   `contentRef` get their `transform` and `opacity` set directly inside a
+   single rAF callback. Scrolling now costs style writes and zero React
+   renders. Values are clamped to the fade distance, and writes are skipped
+   entirely once the scroll position stops changing.
+2. **The WebGL loop stops off screen.** R3F's `frameloop` flips to `"never"`
+   via an `IntersectionObserver` with a 200px `rootMargin` (so the scene is
+   warm before you scroll back). Verified with wrapped GL calls:
+   `114 draws/sec` visible → `0` off screen → `114` again on return.
+3. **The mark stays static on touch devices.** It wraps a full-viewport
+   canvas, so animating its opacity or transform makes the compositor
+   re-blend a screen-sized alpha layer *on top of* a canvas that is already
+   repainting every frame — the two costs stack. `(pointer: coarse)` skips
+   both; the text still fades, and the hero is leaving the viewport anyway so
+   the difference is not visible.
+4. **DPR is capped lower on touch.** The relief is a soft, low-frequency form
+   and survives a lower cap than text. `[1, 1.25]` on `(pointer: coarse)`
+   instead of `[1, 1.75]` — more than halves pixels per frame through the
+   mipmap-blur bloom chain, with no visible loss at this scale.
+
+`Nav` was doing the same thing: `setScrolled`/`setHidden` fired on every
+scroll event even when the boolean was unchanged. It now throttles to rAF and
+only calls `setState` when a value actually flips.
+
+Harnesses: `scripts/measure-scroll-script.mjs` (main-thread work during a
+scripted scroll), `scripts/profile-scroll.mjs` (self-time by function),
+`scripts/verify-frameloop-pause.mjs` (GL calls/s on and off screen), and
+`scripts/verify-fade-behavior.mjs` (fade still correct on touch and desktop).
+
+Note: headless Chromium rasterises WebGL in software, so frame-interval and
+`(program)` samples from these harnesses are **not** indicative of a real
+device. Trust script time, GL call counts, and computed styles instead.
+
 ---
 
 ## Database Schema

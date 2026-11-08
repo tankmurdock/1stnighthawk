@@ -499,10 +499,26 @@ function Scene({ sampled, reduced }: { sampled: Sampled; reduced: boolean }) {
 export default function HawkScene({ className = "" }: { className?: string }) {
   const [sampled, setSampled] = useState<Sampled | null>(null);
   const [failed, setFailed] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
 
   const reduced = useMemo(() => {
     if (typeof window === "undefined") return false;
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
+  /* Device pixel ratio cap.
+
+     The relief is a soft, low-frequency form, so it holds up at lower
+     resolution than, say, text does. On a 3x phone the 1.75 cap means
+     rendering ~3.7x the pixels of a 1x canvas, every frame, through a
+     mipmap-blur bloom chain — and that cost lands directly on the scroll.
+     Capping touch devices at 1.25 cuts pixels per frame by more than half
+     with no visible loss at this scale. */
+  const dpr = useMemo<[number, number]>(() => {
+    if (typeof window === "undefined") return [1, 1.75];
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    return coarse ? [1, 1.25] : [1, 1.75];
   }, []);
 
   useEffect(() => {
@@ -530,17 +546,39 @@ export default function HawkScene({ className = "" }: { className?: string }) {
     };
   }, []);
 
+  /* Pause the render loop when the hero is off screen.
+
+     A generous rootMargin so the scene is already warm again by the time you
+     scroll back up — resuming into a black frame would be worse than the
+     wasted frames. */
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { rootMargin: "200px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   if (failed) return <StaticHawk className={className} />;
 
   return (
-    <div className={className}>
+    <div ref={wrapRef} className={className}>
       {!sampled && <StaticHawk className="absolute inset-0" />}
 
       {sampled && (
         <Canvas
           className="absolute inset-0"
           camera={{ position: [0, 0.05, 4.6], fov: 44, near: 0.1, far: 40 }}
-          dpr={[1, 1.75]}
+          dpr={dpr}
+          /* Stop rendering once the hero scrolls away. Three.js otherwise
+             keeps drawing the relief, its dust field and the whole post
+             chain for the entire length of the page — pure waste that shows
+             up as dropped frames exactly when you are scrolling past it. */
+          frameloop={visible ? "always" : "never"}
           gl={{
             antialias: false,
             alpha: true,

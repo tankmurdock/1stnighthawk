@@ -171,6 +171,69 @@ scripts/            Playwright screenshot + diagnostic harnesses
 
 This is why no `.glb` is needed, and why it still reads as 3D.
 
+### Framing is aspect-aware (`frameFor` in the `Rig`)
+
+The mark has to **bleed** at every size. That is what makes the composition
+work: the hawk is large and slightly cropped, and the headline lands on its
+dark lower half. An earlier version pulled the camera far back on phones
+(`dist` 6.2) to "fit" the mark; the result was a tidy postcard floating above
+the text, which read as a separate panel rather than one layered image — the
+exact complaint that started the mobile hero work.
+
+So narrower screens move *closer*, not further, and aim lower:
+
+| Aspect | Distance | Aim Y | Used by |
+|---|---|---|---|
+| ≥ 1.4 | 4.05 | 0.02 | desktop, landscape |
+| ≥ 1.0 | 4.3 | 0.0 | square-ish |
+| ≥ 0.75 | 3.95 | −0.10 | large phones |
+| < 0.75 | 3.5 | −0.42 | tall narrow phones |
+
+The dolly is eased (`delta * 3`) so an orientation change glides instead of
+snapping.
+
+### Type legibility over the mark
+
+Because the mark sits behind the text, the backdrop under the headline is
+measured, not eyeballed. A scrim anchored to the *viewport* cannot guarantee
+coverage — the content block's height changes with the headline, the
+paragraph, and the viewport, so on a short phone the type lands much higher
+and right on the mark's brightest band.
+
+The wash is therefore anchored to the **content box** (`-top-[70%]`, bleeding
+above it), so it always sits behind the words. Landscape phones are the one
+case that needs something different: there the text is on the left and the
+mark fills the right, so a horizontal falloff handles it.
+
+Verified with `scripts/probe-contrast-ratio.mjs`, which hides the glyphs and
+measures WCAG contrast against the brightest 5% of backdrop under each line:
+
+| Viewport | Bone (worst case) | Sodium (worst case) |
+|---|---|---|
+| phone SE | 12.0:1 | 6.7:1 |
+| phone 13 | 14.2:1 | 7.9:1 |
+| phone landscape | 16.1:1 | 8.9:1 |
+| tablet portrait | 14.5:1 | 8.0:1 |
+| desktop 1440 | 13.6:1 | 7.6:1 |
+
+Large display type needs 3.0:1, so there is roughly double the headroom
+everywhere.
+
+### The `short` variant
+
+Width alone cannot describe a phone in landscape. `844×390` is desktop-wide by
+media query but shorter than any laptop, so `sm:`/`md:` alone produce a
+desktop layout in 390px of height and the CTAs fall below the fold.
+
+`src/index.css` defines a height variant:
+
+```css
+@custom-variant short (@media (max-height: 460px));
+```
+
+Used in `Hero.tsx` to shrink the headline clamp, tighten the spacing, and drop
+the CTA padding. Both buttons stay in the fold down to 320×568.
+
 ---
 
 ## Database Schema
@@ -311,3 +374,20 @@ Two client studies live today:
 - Fluid field was overexposed (additive blending + 20k points + large sprites).
 - Availability text said "Q1 2026" in a November 2026 codebase; now a single
   `site.availability` value.
+- **Mobile hero was the weakest screen on the site.** The content block was
+  `justify-end` inside `min-h-[100svh]` and taller than the space available, so
+  the headline was pushed up *into* the 3D mark — on an iPhone SE `h1` sat at
+  `y=0`, off the top of the screen. Three separate faults compounded:
+  1. The mark was pulled back to `dist` 6.2 on narrow screens, shrinking it
+     into a postcard above the type instead of bleeding behind it. Now the
+     camera moves *closer* and aims lower (`frameFor`), matching the desktop
+     composition.
+  2. The scrim was viewport-anchored, so it missed the type whenever the
+     content block grew or shrank. It is now anchored to the content box and
+     bleeds above it, guaranteeing coverage at any viewport height.
+  3. Landscape phones (`844×390`) got a desktop layout in 390px of height,
+     pushing both CTAs below the fold. Fixed with the `short` height variant.
+
+  Verified across nine viewports from 320×568 to 1440×900: no horizontal
+  overflow, both CTAs in the fold everywhere, and worst-case measured contrast
+  of 6.7:1 on the sodium line (needs 3.0:1).

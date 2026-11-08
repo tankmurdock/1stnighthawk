@@ -224,9 +224,24 @@ function Relief({ sampled, reduced }: { sampled: Sampled; reduced: boolean }) {
 /* ── Camera rig: pointer parallax + scroll dolly ─────────────────── */
 
 function Rig({ reduced }: { reduced: boolean }) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const target = useRef({ x: 0, y: 0 });
   const pointer = useRef({ x: 0, y: 0 });
+
+  /* Framing. The mark must *bleed* — that's what makes the desktop
+     composition work: the hawk is large, slightly cropped, and the headline
+     lands on its dark lower half. Pulling the camera far back on a phone
+     shrinks it into a tidy postcard above the text, which reads as a
+     separate panel instead of one layered image. So on narrow screens we
+     move *closer* and aim lower, cropping the top and dropping the mark
+     into the upper half to leave the type real space. */
+  const frameFor = (w: number, h: number) => {
+    const aspect = w / Math.max(h, 1);
+    if (aspect >= 1.4) return { dist: 4.05, aimY: 0.02 }; // desktop / landscape
+    if (aspect >= 1.0) return { dist: 4.3, aimY: 0.0 };
+    if (aspect >= 0.75) return { dist: 3.95, aimY: -0.1 };
+    return { dist: 3.5, aimY: -0.42 }; // tall, narrow phones
+  };
 
   useEffect(() => {
     if (reduced) return;
@@ -240,10 +255,11 @@ function Rig({ reduced }: { reduced: boolean }) {
 
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
+    const { dist, aimY } = frameFor(size.width, size.height);
 
     if (reduced) {
-      camera.position.set(0, 0.05, 4.2);
-      camera.lookAt(0, 0, 0);
+      camera.position.set(0, aimY, dist);
+      camera.lookAt(0, aimY, 0);
       return;
     }
 
@@ -257,10 +273,13 @@ function Rig({ reduced }: { reduced: boolean }) {
     camera.position.x +=
       (target.current.x + driftX - camera.position.x) * Math.min(1, delta * 4);
     camera.position.y +=
-      (target.current.y + driftY - camera.position.y) * Math.min(1, delta * 4);
-    camera.position.z = 4.05 + Math.sin(t * 0.16) * 0.06;
+      (aimY + target.current.y + driftY - camera.position.y) *
+      Math.min(1, delta * 4);
+    // ease the dolly so a resize (orientation change) doesn't snap
+    camera.position.z +=
+      (dist - camera.position.z) * Math.min(1, delta * 3);
 
-    camera.lookAt(0, 0.02, 0);
+    camera.lookAt(0, aimY + 0.02, 0);
   });
 
   return null;
@@ -520,7 +539,7 @@ export default function HawkScene({ className = "" }: { className?: string }) {
       {sampled && (
         <Canvas
           className="absolute inset-0"
-          camera={{ position: [0, 0.05, 4.2], fov: 44, near: 0.1, far: 40 }}
+          camera={{ position: [0, 0.05, 4.6], fov: 44, near: 0.1, far: 40 }}
           dpr={[1, 1.75]}
           gl={{
             antialias: false,

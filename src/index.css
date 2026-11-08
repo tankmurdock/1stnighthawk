@@ -1,6 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap");
 @import "tailwindcss";
 
+/* Height-based variant. Width alone can't describe a phone in landscape:
+   844×390 is "desktop wide" by media query but shorter than any desktop.
+   Anything at or below 460px tall gets the compact hero treatment. */
+@custom-variant short (@media (max-height: 460px));
+
 @theme {
   /* ── Type ───────────────────────────────────────────────────────── */
   --font-display: "Bricolage Grotesque", "Inter Tight", system-ui, sans-serif;

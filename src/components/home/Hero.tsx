@@ -72,35 +72,49 @@ export default function Hero() {
   const lift = reduced ? 0 : scrollY * 0.22;
 
   return (
-    <section className="relative min-h-[100svh] overflow-hidden bg-void">
-      {/* ── 3D layer ───────────────────────────────────────────────── */}
+    <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-void">
+      {/* ── 3D layer ─────────────────────────────────────────────────
+          Full-bleed at every size — same composition as desktop. On
+          phones the mark bleeds behind the type and is dimmed to darkness
+          by the scrim below, so the headline sits on its dark lower half
+          instead of being pushed into a bright hotspot. */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 z-0 h-full w-full"
         style={{
           transform: `translateY(${lift * 0.35}px)`,
           opacity: 1 - fade * 0.55,
         }}
       >
-        {/* On phones the mark sits high and small so the headline owns the
-            lower two thirds; on desktop it can be the full centrepiece. */}
-        <div className="absolute inset-x-0 top-0 h-[62%] origin-top scale-[0.86] sm:inset-0 sm:h-full sm:scale-100">
-          {mounted ? (
-            <Suspense fallback={<SceneFallback />}>
-              <HawkScene className="absolute inset-0" />
-            </Suspense>
-          ) : (
-            <SceneFallback />
-          )}
-        </div>
+        {mounted ? (
+          <Suspense fallback={<SceneFallback />}>
+            <HawkScene className="absolute inset-0" />
+          </Suspense>
+        ) : (
+          <SceneFallback />
+        )}
       </div>
 
       {/* ── Atmosphere: horizon glow at the floor ─────────────────── */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[45vh]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[45vh]"
         style={{
           background:
             "radial-gradient(ellipse 70% 100% at 50% 118%, rgba(255,160,58,0.20) 0%, rgba(255,106,44,0.07) 38%, transparent 72%)",
+        }}
+      />
+
+      {/* ── Legibility scrim ──────────────────────────────────────────
+          Landscape phones are the only case the content wash can't cover:
+          there the text sits on the left while the mark fills the right,
+          so a horizontal falloff does the work. Everything else is handled
+          by the wash anchored to the text block below. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-10 hidden short:block"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(4,5,10,0.96) 0%, rgba(4,5,10,0.88) 34%, rgba(4,5,10,0.35) 58%, rgba(4,5,10,0) 78%)",
         }}
       />
 
@@ -151,15 +165,37 @@ export default function Hero() {
 
       {/* ── Content ───────────────────────────────────────────────── */}
       <div
-        className="relative z-20 flex min-h-[100svh] flex-col justify-end px-6 pb-16 sm:px-8 sm:pb-20 lg:px-12"
+        className="relative z-20 flex flex-1 flex-col justify-end px-6 pb-10 md:px-8 md:pb-20 lg:px-12 short:pb-5"
         style={{
           transform: `translateY(${-lift}px)`,
           opacity: 1 - fade,
         }}
       >
-        <div className="container-x !px-0">
+        {/* Backdrop that travels with the text. A viewport-anchored scrim
+            can't guarantee coverage because the block's height changes with
+            the headline, the paragraph and the viewport — on a short phone
+            the type lands much higher in the frame, right on the mark's
+            brightest band. This wash is anchored to the content box and
+            bleeds past its top edge, so it always sits behind the words. */}
+        <div className="container-x relative !px-0">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -inset-x-4 -top-[70%] -bottom-6 -z-10"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(4,5,10,0) 0%, rgba(4,5,10,0.35) 28%, rgba(4,5,10,0.8) 52%, rgba(4,5,10,0.96) 70%, #04050a 84%)",
+            }}
+          />
           <div className="max-w-3xl">
-            <h1 className="display text-[clamp(2.9rem,8.2vw,7.2rem)] text-bone">
+            <h1
+              className="display text-[clamp(2.15rem,8.2vw,7.2rem)] text-bone short:text-[clamp(1.6rem,3.6vw,2.4rem)]"
+              style={{
+                // Mobile sits the type close to the glowing mark, so the
+                // sodium line needs separation to stay legible.
+                textShadow:
+                  "0 1px 18px rgba(4,5,10,0.85), 0 0 44px rgba(4,5,10,0.6)",
+              }}
+            >
               <span className="block overflow-hidden pb-[0.06em]">
                 <span
                   className="block"
@@ -200,7 +236,7 @@ export default function Hero() {
           </div>
 
           <div
-            className="mt-10 flex flex-col gap-8 border-t border-haze/50 pt-8 sm:flex-row sm:items-end sm:justify-between"
+            className="mt-7 flex flex-col gap-5 border-t border-haze/50 pt-6 md:mt-10 md:flex-row md:items-end md:justify-between md:gap-8 md:pt-8 short:mt-3 short:flex-row short:items-center short:justify-between short:gap-6 short:pt-3"
             style={{
               opacity: mounted ? 1 : 0,
               transform: mounted ? "none" : "translateY(20px)",
@@ -208,17 +244,17 @@ export default function Hero() {
                 "opacity 1.1s ease 0.75s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.75s",
             }}
           >
-            <p className="max-w-md font-sans text-[15px] leading-relaxed text-bone/55">
+            <p className="max-w-md font-sans text-[14px] leading-relaxed text-bone/55 sm:text-[15px] short:max-w-xs short:text-[11px] short:leading-snug">
               {site.role} in {site.location}. I design the interface and then
               build it — motion, 3D and design system included. No handoff gap.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 min-[380px]:gap-3">
               <Magnetic strength={0.2}>
                 <Link
                   to="/work"
                   data-cursor="view"
-                  className="group relative inline-flex items-center gap-2 overflow-hidden bg-bone px-7 py-4 font-mono text-[11px] uppercase tracking-[0.2em] text-void"
+                  className="group relative inline-flex items-center gap-2 overflow-hidden bg-bone px-4 py-3 font-mono text-[10px] uppercase tracking-[0.16em] text-void min-[380px]:px-6 min-[380px]:tracking-[0.2em] sm:px-7 sm:py-4 sm:text-[11px] short:px-4 short:py-2 short:text-[9px]"
                 >
                   <span className="relative z-10">See the work</span>
                   <span className="absolute inset-0 -translate-x-full bg-sodium transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
@@ -229,7 +265,7 @@ export default function Hero() {
                 <Link
                   to="/lab"
                   data-cursor="view"
-                  className="group inline-flex items-center gap-2 border border-haze px-7 py-4 font-mono text-[11px] uppercase tracking-[0.2em] text-bone/80 transition-colors duration-500 hover:border-sodium/60 hover:text-bone"
+                  className="group inline-flex items-center gap-2 border border-haze px-4 py-3 font-mono text-[10px] uppercase tracking-[0.16em] text-bone/80 transition-colors duration-500 hover:border-sodium/60 hover:text-bone min-[380px]:px-6 min-[380px]:tracking-[0.2em] sm:px-7 sm:py-4 sm:text-[11px] short:px-4 short:py-2 short:text-[9px]"
                 >
                   Enter the lab
                 </Link>
@@ -238,9 +274,11 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* scroll cue */}
+        {/* scroll cue — hidden on short screens where it competes with the
+            CTAs for the fold, and pointless at heights where the buttons
+            already sit at the bottom edge. */}
         <div
-          className="mt-12 flex items-center gap-3 sm:absolute sm:bottom-9 sm:right-12 sm:mt-0"
+          className="mt-10 items-center gap-3 max-[700px]:hidden md:absolute md:bottom-9 md:right-12 md:mt-0 md:flex"
           style={{
             opacity: mounted ? 1 : 0,
             transition: "opacity 1s ease 1.4s",
